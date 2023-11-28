@@ -1,0 +1,10 @@
+character_02.png
+size:94,52
+filter:Linear,Linear
+pma:true
+star_1
+bounds:2,2,48,48
+offsets:1,1,50,50
+star_2
+bounds:52,9,40,41
+offsets:1,1,42,43

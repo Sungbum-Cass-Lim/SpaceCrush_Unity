@@ -1,0 +1,27 @@
+spaceship.png
+size:489,489
+filter:Linear,Linear
+pma:true
+scale:0.5
+별1
+bounds:289,3,58,58
+별2
+bounds:394,396,89,91
+별3
+bounds:394,312,86,82
+offsets:1,1,88,84
+손1
+bounds:349,9,52,63
+offsets:0,0,52,64
+rotate:90
+손2
+bounds:414,2,48,59
+얼굴
+bounds:289,63,200,177
+rotate:90
+우주선
+bounds:2,265,390,222
+offsets:0,1,390,224
+우주선 2
+bounds:2,2,285,261
+offsets:1,0,287,261
