@@ -26,7 +26,6 @@ public class BlockObj : WaveContent
 
     protected override void OnTouch()
     {
-        Debug.Log("Block Touch");
         transform.parent.position += Vector3.up * 0.65f;
 
         life--;

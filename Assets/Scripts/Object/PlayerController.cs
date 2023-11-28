@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -13,10 +14,22 @@ public class PlayerController : MonoBehaviour
     float moveMaxX = 4f;
     float moveMinX = -4f;
 
-    public int life = 0;
+    private int life = 0;
     private float lifeInterverPosY = 0.5f;
     public GameObject lifeStarPrefab;
-    Stack<GameObject> lifeStarStack = new Stack<GameObject>();
+    public TextMeshPro lifeText;
+
+    public List <GameObject> moveLifeList = new List<GameObject>();
+    Stack <GameObject> currentLifeStack = new Stack<GameObject>();
+
+    private void Start()
+    {
+        life++;
+        currentLifeStack.Push(gameObject);
+        moveLifeList.Add(gameObject);
+
+        AddLife(10);// WaveMgr.Instance.BlockData.playerLife - 1);
+    }
 
     // Update is called once per frame
     void Update()
@@ -37,9 +50,9 @@ public class PlayerController : MonoBehaviour
             moveMouesePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             movementPos = startPlayerPos + (moveMouesePos - startMousePos);
 
-            if(movementPos.x > moveMaxX)
+            if (movementPos.x > moveMaxX)
                 movementPos.x = moveMaxX;
-            else if(movementPos.x < moveMinX)
+            else if (movementPos.x < moveMinX)
                 movementPos.x = moveMinX;
         }
 
@@ -49,34 +62,57 @@ public class PlayerController : MonoBehaviour
 
     private void TailMove()
     {
+        for(int i = moveLifeList.Count - 1; i > 0; i--)
+        {
+            if (moveLifeList[i])
+            {
+                Debug.Log(i);
 
+                float moveToPosX = moveLifeList[i - 1].transform.position.x;
+                float moveToPosY = moveLifeList[i].transform.position.y;
+                Vector2 moveToPos = new Vector2 (moveToPosX, moveToPosY);
+
+                moveLifeList[i].transform.position = Vector2.Lerp(moveLifeList[i].transform.position, moveToPos, Time.deltaTime * moveSpeed * 1.5f);
+            }
+            else
+            {
+                moveLifeList.RemoveAt(i);
+            }
+        }
     }
 
     public void AddLife(int lifeValue)
     {
-        for(int i = 0; i < lifeValue; i++)
+        for (int i = 0; i < lifeValue; i++)
         {
             life++;
 
             GameObject lifeStar = Instantiate(lifeStarPrefab);
-            lifeStar.transform.SetParent(transform);
-            lifeStar.transform.position = transform.position + (Vector3.down * life * lifeInterverPosY);
+            lifeStar.transform.position = currentLifeStack.Peek().transform.position + (Vector3.down * lifeInterverPosY);
 
-            lifeStarStack.Push(lifeStar);
+            moveLifeList.Add(lifeStar);
+            currentLifeStack.Push(lifeStar);
         }
 
-        //TODO: life 텍스트 추가
+        lifeText.text = life.ToString();
     }
 
     public void RemoveLife()
     {
-        --life;
-        Destroy(lifeStarStack.Pop());
+        if (currentLifeStack.TryPop(out var lifeStar))
+        {
+            life--;
+
+            lifeText.text = life.ToString();
+            Destroy(lifeStar);
+        }
+        else
+            Debug.Log("Game Over");
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.TryGetComponent<WaveContent>(out var Content))
+        if (other.TryGetComponent<WaveContent>(out var Content))
         {
             Content.TouchEvent.Invoke();
         }

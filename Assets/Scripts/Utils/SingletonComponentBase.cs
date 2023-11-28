@@ -32,8 +32,6 @@ public abstract class SingletonComponentBase<T> : MonoBehaviour where T : MonoBe
                     else
                         instance = findGameObject.GetComponent<T>();
                 }
-
-                Debug.Log(instance.name);
                 DontDestroyOnLoad(instance);
                 return instance;
             }
