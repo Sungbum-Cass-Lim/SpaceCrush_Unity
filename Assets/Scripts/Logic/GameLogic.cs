@@ -18,7 +18,7 @@ public class GameLogic : MonoBehaviour
         if(CurrentWave != null)
         {
             //TODO: 속도 조절 값 필요
-            CurrentWave.position += Vector3.down * Time.deltaTime * 7;
+            CurrentWave.position += Vector3.down * Time.deltaTime * 4;
 
             if(CurrentWave.position.y <= -10.0f)
             {
