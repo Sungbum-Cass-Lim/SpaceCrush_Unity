@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public struct ObstaclesData
@@ -42,9 +43,10 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
     #endregion
 
     #region Prefab
-    public BlockObj BlockPrefab;
-    public LifeObj LifePrefab;
-    public WallObj WallPrefab;
+    public WaveObj wavePrefab;
+    public BlockObj blockPrefab;
+    public LifeObj lifePrefab;
+    public WallObj wallPrefab;
     #endregion
 
     public int[,] field = new int[heightCount, widhtCount]
@@ -84,11 +86,10 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
         heightBorder = new Vector2(heightCount / 2 * -oneblockSize, heightCount / 2 * oneblockSize);
     }
 
-    public Transform GenerateWave()
+    public WaveObj GenerateWave()
     {
-        Transform wave = new GameObject().transform;
-        wave.name = "Wave";
-        wave.SetParent(this.transform);
+        WaveObj wave = Instantiate(wavePrefab);
+        wave.transform.SetParent(this.transform);
 
         //Block 한 줄 생성
         for (int i = 0; i < widhtCount; i++)
@@ -99,7 +100,7 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
             int blockLife = BlockData.boxList[currentblockIdx][1];
             int blockHasFever = BlockData.boxList[currentblockIdx][3];
 
-            GenerateBlock(SpawnPos, blockLife, blockHasFever).transform.SetParent(wave);
+            GenerateBlock(SpawnPos, blockLife, blockHasFever).transform.SetParent(wave.transform);
             currentblockIdx++;
         }
 
@@ -116,7 +117,7 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
                 Vector2 spawnPos = new Vector2(widhtBorder.x + blankPos.x * oneblockSize, heightBorder.y - blankPos.y * oneblockSize);
                 int blockLife = ObstaclesData.obstaclesBoxList[currentObstacleIdx][1];
 
-                GenerateBlock(spawnPos, blockLife).transform.SetParent(wave);
+                GenerateBlock(spawnPos, blockLife).transform.SetParent(wave.transform);
                 currentObstacleIdx++;
             }
 
@@ -124,7 +125,7 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
             if (obstaclesData.waveList[currentWaveIdx][0] > 0.4f)
             {
                 foreach (var Wall in GenerateWall())
-                    Wall.transform.SetParent(wave);
+                    Wall.transform.SetParent(wave.transform);
             }
         }
 
@@ -137,19 +138,19 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
 
             Vector2 spawnPos = new Vector2(widhtBorder.x + blankPos.x * oneblockSize, heightBorder.y - blankPos.y * oneblockSize);
 
-            GenerateLife(spawnPos, blockData.lifeList[currentLifeIdx][1]).transform.SetParent(wave);
+            GenerateLife(spawnPos, blockData.lifeList[currentLifeIdx][1]).transform.SetParent(wave.transform);
             currentLifeIdx++;
         }
 
         currentWaveIdx++;
 
-        wave.position = Vector2.up * oneblockSize * heightCount;
+        wave.transform.position = Vector2.up * oneblockSize * heightCount;
         return wave;
     }
 
     private WaveContent GenerateBlock(Vector2 pos, int lifeValue, int hasFever = 0)
     {
-        BlockObj block = Instantiate(BlockPrefab);
+        BlockObj block = Instantiate(blockPrefab);
         block.transform.position = pos;
         block.Initialize(lifeValue, hasFever);
 
@@ -158,7 +159,7 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
 
     private WaveContent GenerateLife(Vector2 pos, int lifeValue)
     {
-        LifeObj life = Instantiate(LifePrefab);
+        LifeObj life = Instantiate(lifePrefab);
         life.transform.position = pos;
         life.Initialize(lifeValue);
 
@@ -176,7 +177,7 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
             {
                 if (field[iy, ix] == 1 && Random.Range(0f, 1f) <= 0.2f)
                 {
-                    WallObj wall = Instantiate(WallPrefab);
+                    WallObj wall = Instantiate(wallPrefab);
                     Vector2 spawnPos = new Vector2((widhtBorder.x + ix * oneblockSize) + (oneblockSize / 2), (heightBorder.y - iy * oneblockSize) - oneblockSize - 0.3f);
                     wall.transform.position = spawnPos;
 
@@ -196,7 +197,7 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
         while (true)
         {
             int randPosX = Random.Range(0, widhtCount);
-            int randPosY = Random.Range(1, heightCount);
+            int randPosY = Random.Range(2, heightCount);
 
             if (field[randPosY, randPosX] == 0)
                 return new Vector2(randPosX, randPosY);
@@ -204,9 +205,9 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
     }
 
     //TODO: ObjectPool 추가 후 정리 필요
-    public void ResetWave(Transform CurrentWave)
+    public void ResetWave(WaveObj currentWave)
     {
-        Destroy(CurrentWave.gameObject);
+        Destroy(currentWave.gameObject);
         field = new int[,] 
         {
             { 0, 0, 0, 0, 0 },

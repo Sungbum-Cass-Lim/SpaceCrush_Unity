@@ -10,9 +10,12 @@ public class PlayerController : MonoBehaviour
     Vector2 startPlayerPos;
     Vector2 moveMouesePos;
 
-    public float moveSpeed = 6.0f;
-    float moveMaxX = 4f;
-    float moveMinX = -4f;
+    public float moveSpeed = 7f;
+    public float moveMaxX = 4f;
+    public float moveMinX = -4f;
+
+    public bool isWall = false;
+    public Vector2 wallPos;
 
     private int life = 0;
     private float lifeInterverPosY = 0.5f;
@@ -32,7 +35,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         PlayerMove();
         TailMove();
@@ -56,6 +59,16 @@ public class PlayerController : MonoBehaviour
                 movementPos.x = moveMinX;
         }
 
+        //TODO: Wall에 대한 Player 움직임 만들어야함
+        if(isWall == true && wallPos.x > moveMouesePos.x)
+        {
+            moveMouesePos.x += 1.0f;
+        }
+        else if(isWall == true && wallPos.x < moveMouesePos.x)
+        {
+            moveMouesePos.x -= 1.0f;
+        }
+
         transform.position = Vector2.Lerp(transform.position, movementPos, Time.deltaTime * moveSpeed);
         transform.position = new Vector2(Mathf.Clamp(transform.position.x, -3f, 3f), -1f);
     }
@@ -66,8 +79,6 @@ public class PlayerController : MonoBehaviour
         {
             if (moveLifeList[i])
             {
-                Debug.Log(i);
-
                 float moveToPosX = moveLifeList[i - 1].transform.position.x;
                 float moveToPosY = moveLifeList[i].transform.position.y;
                 Vector2 moveToPos = new Vector2 (moveToPosX, moveToPosY);
@@ -110,11 +121,20 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Game Over");
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.TryGetComponent<WaveContent>(out var Content))
+        if (other.collider.TryGetComponent<WaveContent>(out var Content))
         {
             Content.TouchEvent.Invoke();
+        }
+    }
+    private void OnCollisionExit2D(Collision2D other)
+    {
+        if (other.collider.TryGetComponent<WallObj>(out var Content))
+        {
+            startMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            isWall = false;
+            wallPos = Vector2.zero;
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -9,22 +10,29 @@ public class GameLogic : MonoBehaviour
     public GameObject titleUi;
     public GameObject gameUi;
 
-    public Transform CurrentWave;
+    public WaveObj currentWave;
 
     public PlayerController playerPrefab;
 
-    private void Update()
+    public float interverValue = 0.1f;
+    public Action waveUpEvent;
+
+    private void Awake()
     {
-        if(CurrentWave != null)
+        waveUpEvent = WaveUp;
+    }
+
+    private void FixedUpdate()
+    {
+        if(currentWave != null)
         {
-            //TODO: 속도 조절 값 필요
-            CurrentWave.position += Vector3.down * Time.deltaTime * 4;
+            currentWave.rigidbody2d.MovePosition((Vector2)currentWave.transform.position + (Vector2.down * 7.5f * Time.fixedDeltaTime));
 
-            if(CurrentWave.position.y <= -10.0f)
+            if (currentWave.transform.position.y <= -10.0f)
             {
-                WaveMgr.Instance.ResetWave(CurrentWave);
+                WaveMgr.Instance.ResetWave(currentWave);
 
-                CurrentWave = WaveMgr.Instance.GenerateWave();
+                currentWave = WaveMgr.Instance.GenerateWave();
             }
         }
     }
@@ -34,7 +42,14 @@ public class GameLogic : MonoBehaviour
         titleUi.SetActive(false);
         gameUi.SetActive(true);
 
-        CurrentWave = WaveMgr.Instance.GenerateWave();
+        currentWave = WaveMgr.Instance.GenerateWave();
         GameMgr.Instance.GameStart(Instantiate(playerPrefab));
+    }
+
+    public void WaveUp()
+    {
+        float upPosY = currentWave.transform.position.y + interverValue;
+
+        currentWave.transform.position = new Vector2(0, upPosY);
     }
 }

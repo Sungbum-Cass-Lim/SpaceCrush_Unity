@@ -26,11 +26,11 @@ public class BlockObj : WaveContent
 
     protected override void OnTouch()
     {
-        transform.parent.position += Vector3.up * 0.65f;
+        GameMgr.Instance.GameLogic.waveUpEvent.Invoke();
 
         life--;
         lifeText.text = this.life.ToString();
-        GameMgr.Instance.Player.RemoveLife();
+        //GameMgr.Instance.Player.RemoveLife();
 
         if (life <= 0)
             DeleteEvent.Invoke();

@@ -94,7 +94,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2030742249873063034}
   - component: {fileID: 514739573710171806}
-  - component: {fileID: 5642925368522414801}
   - component: {fileID: 5348302978135700105}
   m_Layer: 7
   m_Name: Block
@@ -137,33 +136,6 @@ MonoBehaviour:
   life: 0
   DefultBlock: {fileID: 3501146212697855655}
   FeverBlcok: {fileID: 8078382850597457045}
---- !u!50 &5642925368522414801
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6940181018489032418}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 7
 --- !u!61 &5348302978135700105
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -193,7 +165,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: -0.36}
@@ -207,7 +179,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.25, y: 0.44}
+  m_Size: {x: 1.2, y: 0.4}
   m_EdgeRadius: 0
 --- !u!1 &7726240413710740767
 GameObject:

@@ -14,6 +14,8 @@ public class GameMgr : SingletonComponentBase<GameMgr>
     public GameState gameState = GameState.Title;
     public PlayerController Player = null;
 
+    public GameLogic GameLogic = null;
+
     protected override void InitializeSingleton()
     {
         gameState = GameState.Title;
