@@ -34,6 +34,7 @@ public class BlockObj : WaveContent
     {
         if(GameMgr.Instance.GameLogic.isFeverTime)
         {
+            GameMgr.Instance.GameScore += life;
             DeleteEvent.Invoke();
             return;
         }
