@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Experimental.GlobalIllumination;
 
 public enum GameState
 {
@@ -12,9 +11,12 @@ public enum GameState
 
 public class GameMgr : SingletonComponentBase<GameMgr>
 {
+    [Header("Current Game Info")]
     public GameState gameState = GameState.Title;
-
     public PlayerController Player = null;
+    public int GameScore = 0;
+
+    [Header("Importent Game Component")]
     public GameLogic GameLogic = null;
     public TitleLogic TitleLogic = null;
 
@@ -32,6 +34,7 @@ public class GameMgr : SingletonComponentBase<GameMgr>
     public void GameOver()
     {
         gameState = GameState.GameEnd;
+        GameScore = 0;
         Player = null;
     }
 }

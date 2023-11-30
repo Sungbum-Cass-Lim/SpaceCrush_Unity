@@ -39,6 +39,8 @@ public class BlockObj : WaveContent
         }
 
         life--;
+
+        GameMgr.Instance.GameScore++;
         GameMgr.Instance.GameLogic.waveUpEvent.Invoke();
         GameMgr.Instance.Player.RemoveLife();
 

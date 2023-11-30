@@ -9,6 +9,7 @@ public class GameLogic : MonoBehaviour
 {
     public GameObject titleUi;
     public GameObject gameUi;
+    public Text ScoreText;
 
     public bool isFeverTime = false;
 
@@ -16,7 +17,7 @@ public class GameLogic : MonoBehaviour
     
     public BackgroundController bgController;
 
-    private WaveObj currentWave;
+    public WaveObj currentWave;
     public float originDownSpeed;
     public float currentDownSpeed;
     public float interverValue;
@@ -30,7 +31,9 @@ public class GameLogic : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(currentWave != null)
+        ScoreText.text = GameMgr.Instance.GameScore.ToString();
+
+        if (currentWave != null)
         {
             currentWave.rigidbody2d.MovePosition((Vector2)currentWave.transform.position + (Vector2.down * currentDownSpeed * Time.fixedDeltaTime));
 
