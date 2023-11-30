@@ -14,7 +14,7 @@ public class GameLogic : MonoBehaviour
     public bool isFeverTime = false;
 
     public PlayerController playerPrefab;
-    
+
     public BackgroundController bgController;
 
     public WaveObj currentWave;
@@ -52,7 +52,7 @@ public class GameLogic : MonoBehaviour
         gameUi.SetActive(true);
 
         currentWave = WaveMgr.Instance.GenerateWave();
-        GameMgr.Instance.Player = Instantiate(playerPrefab);
+        GameMgr.Instance.GameStart(Instantiate(playerPrefab));
     }
 
     public void WaveUp()
