@@ -31,4 +31,26 @@ public class BackgroundController : MonoBehaviour
             gears.Rotate(Vector3.forward * Time.deltaTime * 30);
         }
     }
+
+    public void BgFeverStart()
+    {
+        foreach (var bgData in bgDataList)
+        {
+            Material material = new Material(bgEffctShader);
+
+            bgData.Renderer.material = material;
+            material.SetFloat("_MoveSpeed", bgData.moveSpeed * GameConfig.FEVER_UP);
+        }
+    }
+
+    public void BgFeverEnd()
+    {
+        foreach (var bgData in bgDataList)
+        {
+            Material material = new Material(bgEffctShader);
+
+            bgData.Renderer.material = material;
+            material.SetFloat("_MoveSpeed", bgData.moveSpeed);
+        }
+    }
 }

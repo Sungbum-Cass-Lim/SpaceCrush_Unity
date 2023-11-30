@@ -10,16 +10,21 @@ public class GameLogic : MonoBehaviour
     public GameObject titleUi;
     public GameObject gameUi;
 
-    public WaveObj currentWave;
+    public bool isFeverTime = false;
 
     public PlayerController playerPrefab;
+    
+    public BackgroundController bgController;
 
-    public float downSpeed;
+    private WaveObj currentWave;
+    public float originDownSpeed;
+    public float currentDownSpeed;
     public float interverValue;
     public Action waveUpEvent;
 
     private void Awake()
     {
+        currentDownSpeed = originDownSpeed;
         waveUpEvent = WaveUp;
     }
 
@@ -27,7 +32,7 @@ public class GameLogic : MonoBehaviour
     {
         if(currentWave != null)
         {
-            currentWave.rigidbody2d.MovePosition((Vector2)currentWave.transform.position + (Vector2.down * downSpeed * Time.fixedDeltaTime));
+            currentWave.rigidbody2d.MovePosition((Vector2)currentWave.transform.position + (Vector2.down * currentDownSpeed * Time.fixedDeltaTime));
 
             if (currentWave.transform.position.y <= -10.0f)
             {
@@ -44,7 +49,7 @@ public class GameLogic : MonoBehaviour
         gameUi.SetActive(true);
 
         currentWave = WaveMgr.Instance.GenerateWave();
-        GameMgr.Instance.GameStart(Instantiate(playerPrefab));
+        GameMgr.Instance.Player = Instantiate(playerPrefab);
     }
 
     public void WaveUp()
@@ -52,5 +57,14 @@ public class GameLogic : MonoBehaviour
         float upPosY = currentWave.transform.position.y + interverValue;
 
         currentWave.transform.position = new Vector2(0, upPosY);
+    }
+
+    public void FeverStart()
+    {
+        isFeverTime = true;
+
+        bgController.BgFeverStart();
+        currentDownSpeed = originDownSpeed + GameConfig.FEVER_UP;
+        GameMgr.Instance.Player.feverTime = GameConfig.FEVER_TIME;
     }
 }

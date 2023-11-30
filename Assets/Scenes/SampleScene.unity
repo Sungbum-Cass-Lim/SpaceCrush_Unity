@@ -338,10 +338,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   titleUi: {fileID: 618460508}
   gameUi: {fileID: 896491886}
-  currentWave: {fileID: 0}
+  isFeverTime: 0
   playerPrefab: {fileID: 4641627432835457173, guid: 80be2ff95c0db2b4ea1453703775e6e3, type: 3}
-  downSpeed: 7.5
-  interverValue: 0.7
+  bgController: {fileID: 1616843600}
+  originDownSpeed: 8
+  currentDownSpeed: 0
+  interverValue: 0.6
 --- !u!1 &257046061
 GameObject:
   m_ObjectHideFlags: 0
@@ -2257,6 +2259,7 @@ MonoBehaviour:
   gameState: 0
   Player: {fileID: 0}
   GameLogic: {fileID: 117514207}
+  TitleLogic: {fileID: 0}
 --- !u!1 &1761406807
 GameObject:
   m_ObjectHideFlags: 0
@@ -2289,9 +2292,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   titleUi: {fileID: 618460508}
   gameUi: {fileID: 896491886}
-  currentWave: {fileID: 0}
+  isFeverTime: 0
   playerPrefab: {fileID: 0}
-  downSpeed: 0
+  bgController: {fileID: 0}
+  originDownSpeed: 0
+  currentDownSpeed: 0
   interverValue: 0.8
 --- !u!4 &1761406809
 Transform:

@@ -7,16 +7,18 @@ using TMPro;
 public class BlockObj : WaveContent
 {
     public TextMeshPro lifeText;
+
     private int life;
     private bool isFever = false;
 
     public GameObject DefultBlock;
     public GameObject FeverBlcok;
-    
+
+    public GameObject blockBurstPrefab;
 
     public void Initialize(int lifeValue, int hasFever)
     {
-        this.life = lifeValue + 500;
+        this.life = lifeValue;
         lifeText.text = this.life.ToString();
 
         if(hasFever > 0)
@@ -30,7 +32,7 @@ public class BlockObj : WaveContent
 
     protected override void OnTouch()
     {
-        if(GameMgr.Instance.Player.feverTime > 0)
+        if(GameMgr.Instance.GameLogic.isFeverTime)
         {
             DeleteEvent.Invoke();
             return;
@@ -38,9 +40,9 @@ public class BlockObj : WaveContent
 
         life--;
         GameMgr.Instance.GameLogic.waveUpEvent.Invoke();
+        GameMgr.Instance.Player.RemoveLife();
 
         lifeText.text = this.life.ToString();
-        GameMgr.Instance.Player.RemoveLife();
 
         if (life <= 0)
             DeleteEvent.Invoke();
@@ -49,8 +51,12 @@ public class BlockObj : WaveContent
     protected override void OnDelete()
     {
         if(isFever)
-            GameMgr.Instance.Player.feverTime = GameConfig.FEVER_TIME;
+            GameMgr.Instance.GameLogic.FeverStart();
         
+        GameObject burstEffect = Instantiate(blockBurstPrefab);
+        burstEffect.transform.position = transform.position;
+
+        Destroy(burstEffect, 1.0f);
         Destroy(gameObject);
     }
 }

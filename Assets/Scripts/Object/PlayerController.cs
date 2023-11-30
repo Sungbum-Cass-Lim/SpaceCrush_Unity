@@ -15,8 +15,8 @@ public class PlayerController : MonoBehaviour
     private Vector2 moveMouesePos;
 
     public float moveSpeed = 7f;
-    public float moveMaxX = 4f;
-    public float moveMinX = -4f;
+    private float moveMaxX = 4f;
+    private float moveMinX = -4f;
 
     public GameObject lifePrefab;
     public TextMeshPro lifeText;
@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
         currentlifeStack.Push(gameObject);
         moveLifeList.Add(gameObject);
 
-        AddLife(500);//WaveMgr.Instance.BlockData.playerLife - 1);
+        AddLife(WaveMgr.Instance.BlockData.playerLife - 1);
     }
 
     // Update is called once per frame
@@ -52,8 +52,6 @@ public class PlayerController : MonoBehaviour
         PlayerFever();
         TailMove();
     }
-
-
 
     private void PlayerMove()
     {
@@ -107,7 +105,7 @@ public class PlayerController : MonoBehaviour
         }
 
         else
-            playerCharacterRender.material.color = Color.Lerp(playerCharacterRender.material.color, new Color(1, 1, 1), 0.2f);
+            playerCharacterRender.material.color = Color.Lerp(playerCharacterRender.material.color, Color.white, 0.2f);
     }
 
     private void TailMove()
@@ -157,8 +155,6 @@ public class PlayerController : MonoBehaviour
         else
             Debug.Log("Game Over");
     }
-
-
 
     private void OnCollisionEnter2D(Collision2D other)
     {
