@@ -14,7 +14,8 @@ public class GameLogic : MonoBehaviour
 
     public PlayerController playerPrefab;
 
-    public float interverValue = 0.1f;
+    public float downSpeed;
+    public float interverValue;
     public Action waveUpEvent;
 
     private void Awake()
@@ -26,7 +27,7 @@ public class GameLogic : MonoBehaviour
     {
         if(currentWave != null)
         {
-            currentWave.rigidbody2d.MovePosition((Vector2)currentWave.transform.position + (Vector2.down * 7.5f * Time.fixedDeltaTime));
+            currentWave.rigidbody2d.MovePosition((Vector2)currentWave.transform.position + (Vector2.down * downSpeed * Time.fixedDeltaTime));
 
             if (currentWave.transform.position.y <= -10.0f)
             {

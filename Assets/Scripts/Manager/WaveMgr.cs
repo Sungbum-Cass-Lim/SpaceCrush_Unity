@@ -27,9 +27,6 @@ public struct WaveInfo
 
 public class WaveMgr : SingletonComponentBase<WaveMgr>
 {
-    public const int widhtCount = 5;
-    public const int heightCount = 7;
-
     #region WaveInfo
     public TextAsset waveJsonData;
     WaveInfo waveInfos;
@@ -49,7 +46,7 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
     public WallObj wallPrefab;
     #endregion
 
-    public int[,] field = new int[heightCount, widhtCount]
+    public int[,] field = new int[GameConfig.FILED_HEIGHT_SIZE, GameConfig.FILED_WIDHT_SIZE]
     {
         { 0, 0, 0, 0, 0 },
         { 0, 0, 0, 0, 0 },
@@ -79,11 +76,11 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
         obstaclesData = blockData.obstaclesData;
 
         //blockSize와 여백 구하는 공식(ScreenWidth / blockImageWidth / fieldWidthCount + 여백)
-        oneblockSize = (Screen.width / 114f / widhtCount) + 0.2f;
+        oneblockSize = (Screen.width / 114f / GameConfig.FILED_WIDHT_SIZE) + 0.2f;
 
         //field Width, Height 최저값/최대값 구하는 공식
-        widhtBorder = new Vector2(widhtCount / 2 * -oneblockSize, widhtCount / 2 * oneblockSize);
-        heightBorder = new Vector2(heightCount / 2 * -oneblockSize, heightCount / 2 * oneblockSize);
+        widhtBorder = new Vector2(GameConfig.FILED_WIDHT_SIZE / 2 * -oneblockSize, GameConfig.FILED_WIDHT_SIZE / 2 * oneblockSize);
+        heightBorder = new Vector2(GameConfig.FILED_HEIGHT_SIZE / 2 * -oneblockSize, GameConfig.FILED_HEIGHT_SIZE / 2 * oneblockSize);
     }
 
     public WaveObj GenerateWave()
@@ -92,7 +89,7 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
         wave.transform.SetParent(this.transform);
 
         //Block 한 줄 생성
-        for (int i = 0; i < widhtCount; i++)
+        for (int i = 0; i < GameConfig.FILED_WIDHT_SIZE; i++)
         {
             field[0, i] = 1;
 
@@ -144,7 +141,7 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
 
         currentWaveIdx++;
 
-        wave.transform.position = Vector2.up * oneblockSize * heightCount;
+        wave.transform.position = Vector2.up * oneblockSize * GameConfig.FILED_HEIGHT_SIZE;
         return wave;
     }
 
@@ -196,8 +193,8 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
     {
         while (true)
         {
-            int randPosX = Random.Range(0, widhtCount);
-            int randPosY = Random.Range(2, heightCount);
+            int randPosX = Random.Range(0, GameConfig.FILED_WIDHT_SIZE);
+            int randPosY = Random.Range(2, GameConfig.FILED_HEIGHT_SIZE);
 
             if (field[randPosY, randPosX] == 0)
                 return new Vector2(randPosX, randPosY);

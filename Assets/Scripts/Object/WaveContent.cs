@@ -3,8 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum ContentType
+{
+    Block,
+    Life,
+    Wall,
+}
+
 public abstract class WaveContent : MonoBehaviour
 {
+    public ContentType contentType;
+
     public Action TouchEvent;
     public Action DeleteEvent;
 
