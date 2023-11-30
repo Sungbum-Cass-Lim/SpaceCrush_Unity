@@ -7265,7 +7265,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1761406809}
-  - component: {fileID: 1761406808}
   - component: {fileID: 1761406810}
   m_Layer: 0
   m_Name: TitleLogic
@@ -7274,28 +7273,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1761406808
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1761406807}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d44fa3edb44b0e24ab774dd9b0be1b89, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  titleUi: {fileID: 618460508}
-  gameUi: {fileID: 896491886}
-  ScoreText: {fileID: 0}
-  isFeverTime: 0
-  playerPrefab: {fileID: 0}
-  bgController: {fileID: 0}
-  currentWave: {fileID: 0}
-  originDownSpeed: 0
-  currentDownSpeed: 0
-  interverValue: 0.8
 --- !u!4 &1761406809
 Transform:
   m_ObjectHideFlags: 0
