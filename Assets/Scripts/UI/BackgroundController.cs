@@ -48,9 +48,8 @@ public class BackgroundController : MonoBehaviour
     {
         foreach (var bgData in bgDataList)
         {
-            Material material = new Material(bgEffctShader);
-
-            bgData.Renderer.material = material;
+            Material material = bgData.Renderer.material;
+            material.SetFloat("_MoveSpeed", bgData.moveSpeed);
         }
     }
 }

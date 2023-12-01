@@ -15,8 +15,10 @@ public class PlayerController : MonoBehaviour
     public Vector2 moveMouesePos;
 
     public float moveSpeed = 7f;
-    private float moveMaxX = 4f;
-    private float moveMinX = -4f;
+    private float mouseMaxX = 4f;
+    private float mouseMinX = -4f;
+    public float moveMaxX = 3f;
+    public float moveMinX = 3f;
 
     public GameObject lifePrefab;
     public TextMeshPro lifeText;
@@ -69,18 +71,18 @@ public class PlayerController : MonoBehaviour
             moveMouesePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             movementPos = startPlayerPos + (moveMouesePos - startMousePos);
 
-            if (movementPos.x > moveMaxX)
-                movementPos.x = moveMaxX;
+            if (movementPos.x > mouseMaxX)
+                movementPos.x = mouseMaxX;
 
-            else if (movementPos.x < moveMinX)
-                movementPos.x = moveMinX;
+            else if (movementPos.x < mouseMinX)
+                movementPos.x = mouseMinX;
         }
     }
 
     private void PlayerMove()
     {
         transform.position = Vector2.Lerp(transform.position, movementPos, Time.deltaTime * moveSpeed);
-        transform.position = new Vector2(Mathf.Clamp(transform.position.x, -3f, 3f), -1f);
+        transform.position = new Vector2(Mathf.Clamp(transform.position.x, moveMinX, moveMaxX), -1f);
     }
 
     private void PlayerCrush()
@@ -173,6 +175,17 @@ public class PlayerController : MonoBehaviour
             {
                 crushPushTime = 0.15f;
             }
+        }
+    }
+    private void OnCollisionExit2D(Collision2D other)
+    {
+        if (other.collider.TryGetComponent<WallObj>(out var Content))
+        {
+            startPlayerPos = transform.position;
+            startMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+            moveMaxX = 3f;
+            moveMinX = -3f;
         }
     }
 }

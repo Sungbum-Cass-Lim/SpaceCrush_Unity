@@ -14,7 +14,17 @@ public class WallObj : WaveContent
     //TODO: Wall스크립트 작성 필요
     protected override void OnTouch()
     {
-        
+        //오른쪽 벽
+        if (GameMgr.Instance.Player.transform.position.x < transform.position.x)
+        {
+            GameMgr.Instance.Player.moveMaxX = transform.position.x - 0.3f;
+        }
+
+        //왼쪽 벽
+        else
+        {
+            GameMgr.Instance.Player.moveMinX = transform.position.x + 0.3f;
+        }
     }
 
     protected override void OnDelete()
