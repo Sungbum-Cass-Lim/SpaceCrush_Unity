@@ -7,17 +7,22 @@ using UnityEngine.UI;
 
 public class GameLogic : MonoBehaviour
 {
+    [Header("UI")]
     public GameObject titleUi;
     public GameObject gameUi;
     public Text ScoreText;
 
+    [Header("Fever Event")]
     public bool isFeverTime = false;
-
     public PlayerController playerPrefab;
-
     public BackgroundController bgController;
 
-    public WaveObj currentWave;
+    [Header("WaveSpawn")]
+    public List<WaveObj> currentWaveList = new List<WaveObj>();
+    public Stack<WaveObj> RemoveWaveStack = new Stack<WaveObj>();
+    public int MaxSpawnWave;
+
+    [Header("Wave Move")]
     public float originDownSpeed;
     public float currentDownSpeed;
     public float interverValue;
@@ -26,6 +31,7 @@ public class GameLogic : MonoBehaviour
     private void Awake()
     {
         currentDownSpeed = originDownSpeed;
+
         waveUpEvent = WaveUp;
     }
 
@@ -33,16 +39,34 @@ public class GameLogic : MonoBehaviour
     {
         ScoreText.text = GameMgr.Instance.GameScore.ToString();
 
-        if (currentWave != null)
+        //wave 생성
+        if (currentWaveList.Count < MaxSpawnWave && GameMgr.Instance.gameState == GameState.Game)
         {
-            currentWave.rigidbody2d.MovePosition((Vector2)currentWave.transform.position + (Vector2.down * currentDownSpeed * Time.fixedDeltaTime));
+            currentWaveList.Add(WaveMgr.Instance.GenerateWave());
+            currentWaveList[currentWaveList.Count-1].transform.position = (Vector2.up * WaveMgr.Instance.oneblockSize * GameConfig.FILED_HEIGHT_SIZE) * currentWaveList.Count;
+        }
 
-            if (currentWave.transform.position.y <= -10.0f)
+        //wave 이동
+        if (currentWaveList.Count > 0)
+        {
+            foreach (var wave in currentWaveList)
             {
-                WaveMgr.Instance.ResetWave(currentWave);
+                wave.rigidbody2d.MovePosition((Vector2)wave.transform.position + (Vector2.down * currentDownSpeed * Time.fixedDeltaTime));
 
-                currentWave = WaveMgr.Instance.GenerateWave();
+                if(wave.transform.position.y < -10f)
+                {
+                    RemoveWaveStack.Push(wave);
+                }
             }
+        }
+
+        //wave 삭제
+        for (int i = 0; i < RemoveWaveStack.Count; i++)
+        {
+            WaveObj RemoveWave = RemoveWaveStack.Pop();
+
+            currentWaveList.Remove(RemoveWave);
+            Destroy(RemoveWave.gameObject);
         }
     }
 
@@ -51,15 +75,16 @@ public class GameLogic : MonoBehaviour
         titleUi.SetActive(false);
         gameUi.SetActive(true);
 
-        currentWave = WaveMgr.Instance.GenerateWave();
         GameMgr.Instance.GameStart(Instantiate(playerPrefab));
     }
 
     public void WaveUp()
     {
-        float upPosY = currentWave.transform.position.y + interverValue;
-
-        currentWave.transform.position = new Vector2(0, upPosY);
+        foreach (var wave in currentWaveList)
+        {
+            float upPosY = wave.transform.position.y + interverValue;
+            wave.transform.position = new Vector2(0, upPosY);
+        }
     }
 
     public void FeverStart()

@@ -419,7 +419,8 @@ MonoBehaviour:
   isFeverTime: 0
   playerPrefab: {fileID: 4641627432835457173, guid: 80be2ff95c0db2b4ea1453703775e6e3, type: 3}
   bgController: {fileID: 1616843600}
-  currentWave: {fileID: 0}
+  currentWaveList: []
+  MaxSpawnWave: 2
   originDownSpeed: 8
   currentDownSpeed: 0
   interverValue: 0.6

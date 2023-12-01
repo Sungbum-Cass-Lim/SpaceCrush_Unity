@@ -76,6 +76,8 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
 
     public WaveObj GenerateWave()
     {
+        field = new int[GameConfig.FILED_HEIGHT_SIZE, GameConfig.FILED_WIDHT_SIZE];
+
         WaveObj wave = Instantiate(wavePrefab);
         wave.transform.SetParent(this.transform);
 
@@ -131,8 +133,6 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
         }
 
         currentWaveIdx++;
-
-        wave.transform.position = Vector2.up * oneblockSize * GameConfig.FILED_HEIGHT_SIZE;
         return wave;
     }
 
@@ -185,17 +185,10 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
         while (true)
         {
             int randPosX = Random.Range(0, GameConfig.FILED_WIDHT_SIZE);
-            int randPosY = Random.Range(2, GameConfig.FILED_HEIGHT_SIZE);
+            int randPosY = Random.Range(2, GameConfig.FILED_HEIGHT_SIZE - 1);
 
             if (field[randPosY, randPosX] == 0)
                 return new Vector2(randPosX, randPosY);
         }
-    }
-
-    //TODO: ObjectPool 추가 후 정리 필요
-    public void ResetWave(WaveObj currentWave)
-    {
-        Destroy(currentWave.gameObject);
-        field = new int[GameConfig.FILED_HEIGHT_SIZE, GameConfig.FILED_WIDHT_SIZE];
     }
 }
