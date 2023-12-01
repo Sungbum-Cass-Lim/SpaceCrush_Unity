@@ -26,18 +26,16 @@ public class GameLogic : MonoBehaviour
     public float originDownSpeed;
     public float currentDownSpeed;
     public float interverValue;
-    public Action waveUpEvent;
+    public int waveUpCount;
 
     private void Awake()
     {
         currentDownSpeed = originDownSpeed;
-
-        waveUpEvent = WaveUp;
     }
 
     private void FixedUpdate()
     {
-        ScoreText.text = GameMgr.Instance.GameScore.ToString();
+        ScoreText.text = GameMgr.Instance.GameScore.ToString(); 
 
         //wave »ý¼º
         if (currentWaveList.Count < MaxSpawnWave && GameMgr.Instance.gameState == GameState.Game)
@@ -67,6 +65,13 @@ public class GameLogic : MonoBehaviour
 
             currentWaveList.Remove(RemoveWave);
             Destroy(RemoveWave.gameObject);
+        }
+
+        //wave Up
+        while (currentWaveList.Count > 0 && waveUpCount > 0)
+        {
+            WaveUp();
+            waveUpCount--;
         }
     }
 

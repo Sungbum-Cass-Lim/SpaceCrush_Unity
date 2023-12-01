@@ -42,7 +42,7 @@ public class BlockObj : WaveContent
         life--;
 
         GameMgr.Instance.GameScore++;
-        GameMgr.Instance.GameLogic.waveUpEvent.Invoke();
+        GameMgr.Instance.GameLogic.waveUpCount++;
         GameMgr.Instance.Player.RemoveLife();
 
         lifeText.text = this.life.ToString();
