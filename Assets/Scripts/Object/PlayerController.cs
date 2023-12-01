@@ -9,10 +9,10 @@ public class PlayerController : MonoBehaviour
     public GameObject playerCharacter;
     private MeshRenderer playerCharacterRender;
 
-    private Vector2 movementPos;
-    private Vector2 startMousePos;
-    private Vector2 startPlayerPos;
-    private Vector2 moveMouesePos;
+    public Vector2 movementPos;
+    public Vector2 startMousePos;
+    public Vector2 startPlayerPos;
+    public Vector2 moveMouesePos;
 
     public float moveSpeed = 7f;
     private float moveMaxX = 4f;
@@ -44,7 +44,11 @@ public class PlayerController : MonoBehaviour
         AddLife(WaveMgr.Instance.BlockData.playerLife - 1);
     }
 
-    // Update is called once per frame
+    private void Update()
+    {
+        PlayerLerpPosTarget();
+    }
+
     void FixedUpdate()
     {
         PlayerMove();
@@ -53,14 +57,14 @@ public class PlayerController : MonoBehaviour
         TailMove();
     }
 
-    private void PlayerMove()
+    private void PlayerLerpPosTarget()
     {
         if (Input.GetMouseButtonDown(0))
         {
             startMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             startPlayerPos = transform.position;
         }
-        if (Input.GetMouseButton(0))
+        else if (Input.GetMouseButton(0))
         {
             moveMouesePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             movementPos = startPlayerPos + (moveMouesePos - startMousePos);
@@ -71,12 +75,15 @@ public class PlayerController : MonoBehaviour
             else if (movementPos.x < moveMinX)
                 movementPos.x = moveMinX;
         }
+    }
 
+    private void PlayerMove()
+    {
         transform.position = Vector2.Lerp(transform.position, movementPos, Time.deltaTime * moveSpeed);
         transform.position = new Vector2(Mathf.Clamp(transform.position.x, -3f, 3f), -1f);
     }
 
-    public void PlayerCrush()
+    private void PlayerCrush()
     {
         if (crushPushTime > 0)
         {

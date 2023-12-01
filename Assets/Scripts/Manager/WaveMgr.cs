@@ -46,16 +46,7 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
     public WallObj wallPrefab;
     #endregion
 
-    public int[,] field = new int[GameConfig.FILED_HEIGHT_SIZE, GameConfig.FILED_WIDHT_SIZE]
-    {
-        { 0, 0, 0, 0, 0 },
-        { 0, 0, 0, 0, 0 },
-        { 0, 0, 0, 0, 0 },
-        { 0, 0, 0, 0, 0 },
-        { 0, 0, 0, 0, 0 },
-        { 0, 0, 0, 0, 0 },
-        { 0, 0, 0, 0, 0 },
-    };
+    public int[,] field = new int[GameConfig.FILED_HEIGHT_SIZE, GameConfig.FILED_WIDHT_SIZE];
 
     public float oneblockSize;
     public Vector2 widhtBorder;
@@ -78,7 +69,7 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
         //blockSize와 여백 구하는 공식(ScreenWidth / blockImageWidth / fieldWidthCount + 여백)
         oneblockSize = (Screen.width / 114f / GameConfig.FILED_WIDHT_SIZE) + 0.2f;
 
-        //field Width, Height 최저값/최대값 구하는 공식
+        //field Width, Height 최저값/최대값 구하는 공식(홀수는 가능하지만 짝수는 오류 있음)
         widhtBorder = new Vector2(GameConfig.FILED_WIDHT_SIZE / 2 * -oneblockSize, GameConfig.FILED_WIDHT_SIZE / 2 * oneblockSize);
         heightBorder = new Vector2(GameConfig.FILED_HEIGHT_SIZE / 2 * -oneblockSize, GameConfig.FILED_HEIGHT_SIZE / 2 * oneblockSize);
     }
@@ -168,9 +159,9 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
     {
         List<WaveContent> Walls = new List<WaveContent>();
 
-        for (int iy = 0; iy < 7; ++iy)
+        for (int iy = 0; iy < GameConfig.FILED_HEIGHT_SIZE; ++iy)
         {
-            for (int ix = 0; ix < 5; ++ix)
+            for (int ix = 0; ix < GameConfig.FILED_WIDHT_SIZE; ++ix)
             {
                 if (field[iy, ix] == 1 && Random.Range(0f, 1f) <= 0.2f)
                 {
@@ -205,15 +196,6 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
     public void ResetWave(WaveObj currentWave)
     {
         Destroy(currentWave.gameObject);
-        field = new int[,] 
-        {
-            { 0, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0 },
-        };
+        field = new int[GameConfig.FILED_HEIGHT_SIZE, GameConfig.FILED_WIDHT_SIZE];
     }
 }
