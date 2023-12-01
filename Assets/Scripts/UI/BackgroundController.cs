@@ -33,6 +33,11 @@ public class BackgroundController : MonoBehaviour
             gears.anchoredPosition -= new Vector2(0, Time.deltaTime * 90);
             gears.Rotate(Vector3.forward * Time.deltaTime * 30);
         }
+
+        foreach (var bgData in bgDataList)
+        {
+            Material material = bgData.Renderer.material;
+        }
     }
 
     public void BgFeverStart()

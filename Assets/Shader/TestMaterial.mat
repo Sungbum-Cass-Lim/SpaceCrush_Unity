@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: TestMaterial
-  m_Shader: {fileID: 4800000, guid: 6cebc73704bee0748b3e7095c7b1ae2b, type: 3}
+  m_Shader: {fileID: 4800000, guid: 487e6b42856b4684292d709518118f63, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -44,7 +44,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 840431a6bc90f1e4a8d109e3ad6218a0, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -63,6 +63,7 @@ Material:
     m_Floats:
     - _AddMoveSpeed: 0
     - _BumpScale: 1
+    - _CT: 5
     - _CurrentMoveSpeed: 100
     - _Cutoff: 0.5
     - _DefultMoveSpeed: 1
