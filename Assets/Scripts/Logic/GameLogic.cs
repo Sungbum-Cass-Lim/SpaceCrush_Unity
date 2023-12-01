@@ -41,7 +41,7 @@ public class GameLogic : MonoBehaviour
         if (currentWaveList.Count < MaxSpawnWave && GameMgr.Instance.gameState == GameState.Game)
         {
             currentWaveList.Add(WaveMgr.Instance.GenerateWave());
-            currentWaveList[currentWaveList.Count-1].transform.position = (Vector2.up * WaveMgr.Instance.oneblockSize * GameConfig.FILED_HEIGHT_SIZE) * currentWaveList.Count;
+            currentWaveList[currentWaveList.Count-1].transform.position = Vector2.up * WaveMgr.Instance.oneblockSize * GameConfig.FILED_HEIGHT_SIZE * currentWaveList.Count;
         }
 
         //wave ÀÌµ¿

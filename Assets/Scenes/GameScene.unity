@@ -424,6 +424,7 @@ MonoBehaviour:
   originDownSpeed: 8
   currentDownSpeed: 0
   interverValue: 0.6
+  waveUpCount: 0
 --- !u!1 &257046061
 GameObject:
   m_ObjectHideFlags: 0

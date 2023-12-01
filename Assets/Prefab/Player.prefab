@@ -221,9 +221,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCharacter: {fileID: 7724049283258694724}
+  movementPos: {x: 0, y: 0}
+  startMousePos: {x: 0, y: 0}
+  startPlayerPos: {x: 0, y: 0}
+  moveMouesePos: {x: 0, y: 0}
   moveSpeed: 6
-  moveMaxX: 4
-  moveMinX: -4
   lifePrefab: {fileID: 7463180591935847190, guid: e955542965dd2fb419744368c500725b, type: 3}
   lifeText: {fileID: 1401302848956435106}
   feverTime: 0

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,8 @@ public class BackgroundController : MonoBehaviour
     public Shader bgEffctShader;
     public List<BGData> bgDataList = new List<BGData>();
     public List<RectTransform> bgGearList = new List<RectTransform>();
+
+    public float feverLerpTime = 0;
 
     private void Awake()
     {
@@ -36,9 +39,7 @@ public class BackgroundController : MonoBehaviour
     {
         foreach (var bgData in bgDataList)
         {
-            Material material = new Material(bgEffctShader);
-
-            bgData.Renderer.material = material;
+            Material material = bgData.Renderer.material;
             material.SetFloat("_MoveSpeed", bgData.moveSpeed * GameConfig.FEVER_UP);
         }
     }
@@ -50,7 +51,6 @@ public class BackgroundController : MonoBehaviour
             Material material = new Material(bgEffctShader);
 
             bgData.Renderer.material = material;
-            material.SetFloat("_MoveSpeed", bgData.moveSpeed);
         }
     }
 }

@@ -14,8 +14,7 @@ public class WallObj : WaveContent
     //TODO: Wall스크립트 작성 필요
     protected override void OnTouch()
     {
-        //GameMgr.Instance.Player.isWall = true;
-        //GameMgr.Instance.Player.wallPos = transform.position;
+        
     }
 
     protected override void OnDelete()
