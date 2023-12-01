@@ -99,8 +99,6 @@ public class GameLogic : MonoBehaviour
         bgController.BgFeverStart();
         currentDownSpeed = originDownSpeed + GameConfig.FEVER_UP;
         GameMgr.Instance.Player.feverTime = GameConfig.FEVER_TIME;
-
-        Invoke(nameof(FeverEnd), GameConfig.FEVER_TIME);
     }
 
     public void FeverEnd()
