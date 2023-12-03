@@ -9,7 +9,7 @@ public class BlockObj : WaveContent
     public TextMeshPro lifeText;
 
     private int life;
-    private bool isFever = false;
+    private bool isFeverBlock = false;
 
     public GameObject DefultBlock;
     public GameObject FeverBlcok;
@@ -23,7 +23,7 @@ public class BlockObj : WaveContent
 
         if(hasFever > 0)
         {
-            isFever = true;
+            isFeverBlock = true;
 
             DefultBlock.SetActive(false);
             FeverBlcok.SetActive(true);
@@ -32,7 +32,7 @@ public class BlockObj : WaveContent
 
     protected override void OnTouch()
     {
-        if(GameMgr.Instance.GameLogic.isFeverTime)
+        if(GameMgr.Instance.GameLogic.isFever)
         {
             GameMgr.Instance.GameScore += life;
             DeleteEvent.Invoke();
@@ -43,17 +43,22 @@ public class BlockObj : WaveContent
 
         GameMgr.Instance.GameScore++;
         GameMgr.Instance.GameLogic.waveUpCount++;
-        //GameMgr.Instance.Player.RemoveLife();
+        GameMgr.Instance.Player.RemoveLife();
 
         lifeText.text = this.life.ToString();
 
-        if (life <= 0)
+        if (life > 0)
+            SoundMgr.Instance.PlayFx("block_knock");
+        else
             DeleteEvent.Invoke();
+
     }
 
     protected override void OnDelete()
     {
-        if(isFever)
+        SoundMgr.Instance.PlayFx("block_break");
+
+        if (isFeverBlock)
             GameMgr.Instance.GameLogic.FeverStart();
         
         GameObject burstEffect = Instantiate(blockBurstPrefab);

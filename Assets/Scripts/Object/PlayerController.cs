@@ -9,10 +9,10 @@ public class PlayerController : MonoBehaviour
     public GameObject playerCharacter;
     private MeshRenderer playerCharacterRender;
 
-    public Vector2 movementPos;
-    public Vector2 startMousePos;
-    public Vector2 startPlayerPos;
-    public Vector2 moveMouesePos;
+    private Vector2 movementPos;
+    private Vector2 startMousePos;
+    private Vector2 startPlayerPos;
+    private Vector2 moveMouesePos;
 
     public float moveSpeed = 7f;
     private float mouseMaxX = 4f;
@@ -25,7 +25,6 @@ public class PlayerController : MonoBehaviour
     private int currentlife = 0;
     private float lifeInterverPosY = 0.5f;
 
-    public float feverTime = 0.0f;
     private float feverColorType = 0;
 
     private Vector2 playerOriginSize;
@@ -48,7 +47,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        PlayerLerpPosTarget();
+        PlayerLerpPos();
     }
 
     void FixedUpdate()
@@ -59,7 +58,7 @@ public class PlayerController : MonoBehaviour
         TailMove();
     }
 
-    private void PlayerLerpPosTarget()
+    private void PlayerLerpPos()
     {
         if (Input.GetMouseButtonDown(0))
         {
@@ -99,10 +98,8 @@ public class PlayerController : MonoBehaviour
 
     private void PlayerFever()
     {
-        if (feverTime > 0)
+        if (GameMgr.Instance.GameLogic.feverTime > 0)
         {
-            feverTime -= Time.deltaTime;
-
             feverColorType += Time.deltaTime;
             int idx = (int)Mathf.Floor(feverColorType);
 
@@ -114,7 +111,9 @@ public class PlayerController : MonoBehaviour
         }
 
         else
+        {
             playerCharacterRender.material.color = Color.Lerp(playerCharacterRender.material.color, Color.white, 0.2f);
+        }
     }
 
     private void TailMove()
@@ -171,7 +170,7 @@ public class PlayerController : MonoBehaviour
         {
             Content.TouchEvent.Invoke();
 
-            if (Content.contentType == ContentType.Block && feverTime <= 0)
+            if (Content.contentType == ContentType.Block && GameMgr.Instance.GameLogic.feverTime <= 0)
             {
                 crushPushTime = 0.15f;
             }
@@ -179,13 +178,16 @@ public class PlayerController : MonoBehaviour
     }
     private void OnCollisionExit2D(Collision2D other)
     {
-        if (other.collider.TryGetComponent<WallObj>(out var Content))
+        if (other.collider.TryGetComponent<WaveContent>(out var Content))
         {
-            startPlayerPos = transform.position;
-            startMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            if (Content.contentType == ContentType.Wall)
+            {
+                startPlayerPos = transform.position;
+                startMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-            moveMaxX = 3f;
-            moveMinX = -3f;
+                moveMaxX = 3f;
+                moveMinX = -3f;
+            }
         }
     }
 }

@@ -87,6 +87,7 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
             field[0, i] = 1;
 
             Vector2 SpawnPos = new Vector2(widhtBorder.x + oneblockSize * i, heightBorder.y + Random.Range(-0.2f, 0.2f));
+
             int blockLife = BlockData.boxList[currentblockIdx][1];
             int blockHasFever = BlockData.boxList[currentblockIdx][3];
 
@@ -166,6 +167,8 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
                 if (field[iy, ix] == 1 && Random.Range(0f, 1f) <= 0.2f)
                 {
                     WallObj wall = Instantiate(wallPrefab);
+                    wall.Initialize();
+
                     Vector2 spawnPos = new Vector2((widhtBorder.x + ix * oneblockSize) + (oneblockSize / 2), (heightBorder.y - iy * oneblockSize) - oneblockSize - 0.3f);
                     wall.transform.position = spawnPos;
 

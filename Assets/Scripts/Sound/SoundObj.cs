@@ -28,6 +28,7 @@ public class SoundObj : MonoBehaviour
     {
         audioSource.clip = clip;
         audioSource.loop = loop;
+        audioSource.volume = 0.5f;
 
         audioSource.Play();
     }
@@ -35,7 +36,7 @@ public class SoundObj : MonoBehaviour
     public void Stop()
     {
         audioSource.Stop();
-        Destroy(this);
+        Destroy(this.gameObject);
     }
 
     //TODO: 나중에 Update말고 최적화 가능한 방향으로 수정 필요

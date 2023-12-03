@@ -13,7 +13,8 @@ public class GameLogic : MonoBehaviour
     public Text ScoreText;
 
     [Header("Fever Event")]
-    public bool isFeverTime = false;
+    public bool isFever = false;
+    public float feverTime = 0.0f;
     public PlayerController playerPrefab;
     public BackgroundController bgController;
 
@@ -40,8 +41,10 @@ public class GameLogic : MonoBehaviour
         //wave 积己
         if (currentWaveList.Count < MaxSpawnWave && GameMgr.Instance.gameState == GameState.Game)
         {
+            Vector2 beforeWavePos = currentWaveList.Count > 0 ? currentWaveList[currentWaveList.Count - 1].transform.position : Vector2.up;
+
             currentWaveList.Add(WaveMgr.Instance.GenerateWave());
-            currentWaveList[currentWaveList.Count-1].transform.position = Vector2.up * WaveMgr.Instance.oneblockSize * GameConfig.FILED_HEIGHT_SIZE * currentWaveList.Count;
+            currentWaveList[currentWaveList.Count-1].transform.position = beforeWavePos + (Vector2.up * WaveMgr.Instance.oneblockSize * GameConfig.FILED_HEIGHT_SIZE);
         }
 
         //wave 捞悼
@@ -73,6 +76,17 @@ public class GameLogic : MonoBehaviour
             WaveUp();
             waveUpCount--;
         }
+
+        //fever 包府
+        if(isFever == true)
+        {
+            feverTime -= Time.fixedDeltaTime;
+
+            if (feverTime < 0)
+            {
+                FeverEnd();
+            }
+        }
     }
 
     public void GameStart()
@@ -94,19 +108,19 @@ public class GameLogic : MonoBehaviour
 
     public void FeverStart()
     {
-        isFeverTime = true;
+        isFever = true;
 
+        feverTime = GameConfig.FEVER_TIME;
+        currentDownSpeed = originDownSpeed + GameConfig.FEVER_UP * 2;
         bgController.BgFeverStart();
-        currentDownSpeed = originDownSpeed + GameConfig.FEVER_UP;
-        GameMgr.Instance.Player.feverTime = GameConfig.FEVER_TIME;
     }
 
     public void FeverEnd()
     {
-        isFeverTime = false;
+        isFever = false;
 
-        bgController.BgFeverEnd();
+        feverTime = 0;
         currentDownSpeed = originDownSpeed;
-        GameMgr.Instance.Player.feverTime = 0;
+        bgController.BgFeverEnd();
     }
 }

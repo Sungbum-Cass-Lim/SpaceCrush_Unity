@@ -3,7 +3,7 @@ Shader"Unlit/Scroll"
 	Properties
 	{
 		_MainTex ("Base (RGB) Trans (A)", 2D) = "white" {}
-		_MoveSpeed("MoveSpeed", float) = 1
+		_MoveSpeed("MoveSpeed", float) = 0
 		//_RotateSpeed("RotateSpeed", float) = 0
 	}
 	SubShader
@@ -51,7 +51,7 @@ Shader"Unlit/Scroll"
 			fixed4 frag(v2f i) : SV_Target
 			{
 			    half2 uv = i.uv;
-			    half t = _Time.x - floor(_Time.x);
+				half t = _Time.x - floor(_Time.x);
 				uv.y = i.uv.y + t * _MoveSpeed;
 				
 			    fixed4 col = tex2D(_MainTex, uv);

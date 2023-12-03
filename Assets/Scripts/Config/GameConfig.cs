@@ -8,7 +8,7 @@ public static class GameConfig
     public const int FILED_HEIGHT_SIZE = 7;
 
     public const float FEVER_TIME = 8;
-    public const float FEVER_UP = 3f;
+    public const float FEVER_UP = 1.5f;
     public static readonly Color[] FEVER_COLORS = 
     {
         new Color(0.9f, 0.35f, 0.35f),

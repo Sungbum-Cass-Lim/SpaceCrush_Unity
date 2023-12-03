@@ -6,7 +6,7 @@ using UnityEngine;
 public class LifeObj : WaveContent
 {
     public TextMeshPro lifeText;
-    public int life;
+    private int life;
 
     public void Initialize(int lifeValue)
     {
@@ -16,7 +16,6 @@ public class LifeObj : WaveContent
 
     protected override void OnTouch()
     {
-        Debug.Log("Star Touch");
         GameMgr.Instance.Player.AddLife(life);
 
         DeleteEvent.Invoke();
@@ -24,6 +23,7 @@ public class LifeObj : WaveContent
 
     protected override void OnDelete()
     {
+        SoundMgr.Instance.PlayFx("item");
         Destroy(gameObject);
     }
 }

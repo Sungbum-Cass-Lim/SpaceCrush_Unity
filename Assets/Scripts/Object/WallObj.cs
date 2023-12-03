@@ -6,9 +6,13 @@ using UnityEngine;
 
 public class WallObj : WaveContent
 {
+    public List<GameObject> wallType = new List<GameObject>();
+    private int currentType = 0;
+
     public void Initialize()
     {
-        //TODO: Wall Sprite교체
+        currentType = Random.Range(0, wallType.Count);
+        wallType[currentType].SetActive(true);
     }
 
     //TODO: Wall스크립트 작성 필요
@@ -29,6 +33,6 @@ public class WallObj : WaveContent
 
     protected override void OnDelete()
     {
-
+        wallType[currentType].SetActive(false);
     }
 }
