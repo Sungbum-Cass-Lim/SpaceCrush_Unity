@@ -23,7 +23,6 @@ public class PlayerController : MonoBehaviour
     public float moveMaxX = 3f;
     public float moveMinX = 3f;
 
-    public GameObject lifePrefab;
     public TextMeshPro lifeText;
     private int playerLife = 0;
     private int afterLife = 0;
@@ -45,7 +44,7 @@ public class PlayerController : MonoBehaviour
 
         currentMoveSpeed = originMoveSpeed;
 
-        AddLife(WaveMgr.Instance.BlockData.playerLife - 1);
+        AddLife(150);//WaveMgr.Instance.BlockData.playerLife - 1);
     }
 
     private void Update()

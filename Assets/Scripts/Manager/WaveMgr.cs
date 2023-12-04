@@ -39,13 +39,6 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
     public ObstaclesData ObstaclesData { get { return obstaclesData; } }
     #endregion
 
-    #region Prefab
-    public WaveObj wavePrefab;
-    public BlockObj blockPrefab;
-    public LifeObj lifePrefab;
-    public WallObj wallPrefab;
-    #endregion
-
     public int[,] field = new int[GameConfig.FILED_HEIGHT_SIZE, GameConfig.FILED_WIDHT_SIZE];
 
     public float oneblockSize;
@@ -66,10 +59,10 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
         blockData = waveInfos.boxData;
         obstaclesData = blockData.obstaclesData;
 
-        //blockSize와 여백 구하는 공식(ScreenWidth / blockImageWidth / fieldWidthCount + 여백)
+        //blockSize와 여백 구하는 공식(ScreenWidth / blockImageWidth / fieldWidthCount + 여백 <= 오류 있음)
         oneblockSize = (Screen.width / 114f / GameConfig.FILED_WIDHT_SIZE) + 0.2f;
 
-        //field Width, Height 최저값/최대값 구하는 공식(홀수는 가능하지만 짝수는 오류 있음)
+        //field Width, Height 최저값/최대값 구하는 공식(오류 있음)
         widhtBorder = new Vector2(GameConfig.FILED_WIDHT_SIZE / 2 * -oneblockSize, GameConfig.FILED_WIDHT_SIZE / 2 * oneblockSize);
         heightBorder = new Vector2(GameConfig.FILED_HEIGHT_SIZE / 2 * -oneblockSize, GameConfig.FILED_HEIGHT_SIZE / 2 * oneblockSize);
     }

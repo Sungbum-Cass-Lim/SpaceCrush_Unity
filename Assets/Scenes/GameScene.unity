@@ -6410,10 +6410,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waveJsonData: {fileID: 4900000, guid: 284c390c49a10384ca496aa01fd861cb, type: 3}
-  wavePrefab: {fileID: 7560663299133454604, guid: c2d17d3c0d272464cac4796669c07129, type: 3}
-  blockPrefab: {fileID: 514739573710171806, guid: f13316076ece2224c9db41be01a126a3, type: 3}
-  lifePrefab: {fileID: 3568854610246577158, guid: 8365be9513f53aa45a849ebb175503ae, type: 3}
-  wallPrefab: {fileID: 2634132901294836987, guid: 96f76a9347d4d604e92276a5c6865fbc, type: 3}
   oneblockSize: 0
   widhtBorder: {x: 0, y: 0}
   heightBorder: {x: 0, y: 0}

@@ -61,6 +61,14 @@ public class GameLogic : MonoBehaviour
             }
         }
 
+        //wave Up
+        if (currentWaveList.Count > 0 && waveUpCount > 0)
+        {
+            Debug.Log("Block Knock");
+            WaveUp();
+            waveUpCount = 0;
+        }
+
         //wave 삭제
         for (int i = 0; i < RemoveWaveStack.Count; i++)
         {
@@ -68,13 +76,6 @@ public class GameLogic : MonoBehaviour
 
             RemoveWave.WaveRelease();
             currentWaveList.Remove(RemoveWave);
-        }
-
-        //wave Up
-        while (currentWaveList.Count > 0 && waveUpCount > 0)
-        {
-            WaveUp();
-            waveUpCount--;
         }
 
         //fever 관리
@@ -101,6 +102,7 @@ public class GameLogic : MonoBehaviour
     {
         foreach (var wave in currentWaveList)
         {
+            
             float upPosY = wave.transform.position.y + interverValue;
             wave.transform.position = new Vector2(0, upPosY);
         }
