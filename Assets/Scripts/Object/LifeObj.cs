@@ -18,12 +18,12 @@ public class LifeObj : WaveContent
     {
         GameMgr.Instance.Player.AddLife(life);
 
-        DeleteEvent.Invoke();
+        gameObject.SetActive(false);
     }
 
     protected override void OnDelete()
     {
         SoundMgr.Instance.PlayFx("item");
-        Destroy(gameObject);
+        parentWave.ContentRelease(this);
     }
 }

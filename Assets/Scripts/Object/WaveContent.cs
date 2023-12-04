@@ -13,6 +13,7 @@ public enum ContentType
 public abstract class WaveContent : MonoBehaviour
 {
     public ContentType contentType;
+    public WaveObj parentWave;
 
     public Action TouchEvent;
     public Action DeleteEvent;

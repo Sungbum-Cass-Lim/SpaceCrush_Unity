@@ -44,7 +44,7 @@ public class GameLogic : MonoBehaviour
             Vector2 beforeWavePos = currentWaveList.Count > 0 ? currentWaveList[currentWaveList.Count - 1].transform.position : Vector2.up;
 
             currentWaveList.Add(WaveMgr.Instance.GenerateWave());
-            currentWaveList[currentWaveList.Count-1].transform.position = beforeWavePos + (Vector2.up * WaveMgr.Instance.oneblockSize * GameConfig.FILED_HEIGHT_SIZE);
+            currentWaveList[currentWaveList.Count-1].transform.position = beforeWavePos + (Vector2.up * WaveMgr.Instance.oneblockSize * GameConfig.FILED_HEIGHT_SIZE * 1.4f);
         }
 
         //wave ¿Ãµø
@@ -66,8 +66,8 @@ public class GameLogic : MonoBehaviour
         {
             WaveObj RemoveWave = RemoveWaveStack.Pop();
 
+            RemoveWave.WaveRelease();
             currentWaveList.Remove(RemoveWave);
-            Destroy(RemoveWave.gameObject);
         }
 
         //wave Up
@@ -94,7 +94,7 @@ public class GameLogic : MonoBehaviour
         titleUi.SetActive(false);
         gameUi.SetActive(true);
 
-        GameMgr.Instance.GameStart(Instantiate(playerPrefab));
+        GameMgr.Instance.GameStart(ObjectPoolMgr.Instance.Load<PlayerController>(PoolObjectType.Player, "Player"));
     }
 
     public void WaveUp()

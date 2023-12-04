@@ -55,7 +55,7 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
     //이 부분 스택으로 바꾸거나 더 좋은 방법 없을지 고민..
     private int currentWaveIdx = 0;
     private int currentblockIdx = 0;
-    private int currentLifeIdx = 0;
+    private int playerLifeIdx = 0;
     private int currentObstacleIdx = 0;
 
     protected override void InitializeSingleton()
@@ -78,7 +78,7 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
     {
         field = new int[GameConfig.FILED_HEIGHT_SIZE, GameConfig.FILED_WIDHT_SIZE];
 
-        WaveObj wave = Instantiate(wavePrefab);
+        WaveObj wave = ObjectPoolMgr.Instance.Load<WaveObj>(PoolObjectType.Wave, "Wave");
         wave.transform.SetParent(this.transform);
 
         //Block 한 줄 생성
@@ -91,7 +91,12 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
             int blockLife = BlockData.boxList[currentblockIdx][1];
             int blockHasFever = BlockData.boxList[currentblockIdx][3];
 
-            GenerateBlock(SpawnPos, blockLife, blockHasFever).transform.SetParent(wave.transform);
+            WaveContent block = GenerateBlock(SpawnPos, blockLife, blockHasFever);
+            block.transform.SetParent(wave.transform);
+
+            block.parentWave = wave;
+            wave.WaveContentAdd(block);
+                
             currentblockIdx++;
         }
 
@@ -99,8 +104,8 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
         if (obstaclesData.waveList[currentWaveIdx][0] > 0.3f)
         {
             //장애물 한 블럭
-            float ObstacleSpawnCount = (obstaclesData.waveList[currentWaveIdx][0] - 0.3f) / 0.1f;
-            for (int i = 0; i < ObstacleSpawnCount; ++i)
+            float obstacleSpawnCount = (obstaclesData.waveList[currentWaveIdx][0] - 0.3f) / 0.1f;
+            for (int i = 0; i < obstacleSpawnCount; ++i)
             {
                 Vector2 blankPos = GetBlankPos();
                 field[(int)blankPos.y, (int)blankPos.x] = 1;
@@ -108,15 +113,24 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
                 Vector2 spawnPos = new Vector2(widhtBorder.x + blankPos.x * oneblockSize, heightBorder.y - blankPos.y * oneblockSize);
                 int blockLife = ObstaclesData.obstaclesBoxList[currentObstacleIdx][1];
 
-                GenerateBlock(spawnPos, blockLife).transform.SetParent(wave.transform);
+                WaveContent blockObstacle = GenerateBlock(spawnPos, blockLife);
+                blockObstacle.transform.SetParent(wave.transform);
+
+                wave.WaveContentAdd(blockObstacle);
+
                 currentObstacleIdx++;
             }
 
             //TODO: 벽(하드코딩 변경 필요)
             if (obstaclesData.waveList[currentWaveIdx][0] > 0.4f)
             {
-                foreach (var Wall in GenerateWall())
-                    Wall.transform.SetParent(wave.transform);
+                foreach (var wall in GenerateWall())
+                {
+                    WaveContent wallObstacle = wall;
+                    wall.transform.SetParent(wave.transform);
+
+                    wave.WaveContentAdd(wall);
+                }
             }
         }
 
@@ -129,8 +143,12 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
 
             Vector2 spawnPos = new Vector2(widhtBorder.x + blankPos.x * oneblockSize, heightBorder.y - blankPos.y * oneblockSize);
 
-            GenerateLife(spawnPos, blockData.lifeList[currentLifeIdx][1]).transform.SetParent(wave.transform);
-            currentLifeIdx++;
+            WaveContent life = GenerateLife(spawnPos, blockData.lifeList[playerLifeIdx][1]);
+            life.transform.SetParent(wave.transform);
+
+            wave.WaveContentAdd(life);
+
+            playerLifeIdx++;
         }
 
         currentWaveIdx++;
@@ -139,7 +157,7 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
 
     private WaveContent GenerateBlock(Vector2 pos, int lifeValue, int hasFever = 0)
     {
-        BlockObj block = Instantiate(blockPrefab);
+        BlockObj block = ObjectPoolMgr.Instance.Load<BlockObj>(PoolObjectType.Wave, "Block");
         block.transform.position = pos;
         block.Initialize(lifeValue, hasFever);
 
@@ -148,7 +166,7 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
 
     private WaveContent GenerateLife(Vector2 pos, int lifeValue)
     {
-        LifeObj life = Instantiate(lifePrefab);
+        LifeObj life = ObjectPoolMgr.Instance.Load<LifeObj>(PoolObjectType.Wave, "Life");
         life.transform.position = pos;
         life.Initialize(lifeValue);
 
@@ -166,7 +184,7 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
             {
                 if (field[iy, ix] == 1 && Random.Range(0f, 1f) <= 0.2f)
                 {
-                    WallObj wall = Instantiate(wallPrefab);
+                    WallObj wall = ObjectPoolMgr.Instance.Load<WallObj>(PoolObjectType.Wave, "Wall");
                     wall.Initialize();
 
                     Vector2 spawnPos = new Vector2((widhtBorder.x + ix * oneblockSize) + (oneblockSize / 2), (heightBorder.y - iy * oneblockSize) - oneblockSize - 0.3f);

@@ -11,6 +11,8 @@ public class WallObj : WaveContent
 
     public void Initialize()
     {
+        wallType[currentType].SetActive(false);
+
         currentType = Random.Range(0, wallType.Count);
         wallType[currentType].SetActive(true);
     }
@@ -33,6 +35,6 @@ public class WallObj : WaveContent
 
     protected override void OnDelete()
     {
-        wallType[currentType].SetActive(false);
+        
     }
 }

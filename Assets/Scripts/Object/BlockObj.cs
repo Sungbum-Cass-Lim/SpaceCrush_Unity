@@ -18,6 +18,11 @@ public class BlockObj : WaveContent
 
     public void Initialize(int lifeValue, int hasFever)
     {
+        isFeverBlock = false;
+
+        DefultBlock.SetActive(true);
+        FeverBlcok.SetActive(false);
+
         this.life = lifeValue;
         lifeText.text = this.life.ToString();
 
@@ -61,10 +66,10 @@ public class BlockObj : WaveContent
         if (isFeverBlock)
             GameMgr.Instance.GameLogic.FeverStart();
         
-        GameObject burstEffect = Instantiate(blockBurstPrefab);
+        GameObject burstEffect = ObjectPoolMgr.Instance.Load<Transform>(PoolObjectType.Effect, "BlockBurst").gameObject;
         burstEffect.transform.position = transform.position;
 
         Destroy(burstEffect, 1.0f);
-        Destroy(gameObject);
+        parentWave.ContentRelease(this);
     }
 }

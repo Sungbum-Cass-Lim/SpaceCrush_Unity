@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -14,7 +15,9 @@ public class PlayerController : MonoBehaviour
     private Vector2 startPlayerPos;
     private Vector2 moveMouesePos;
 
-    public float moveSpeed = 7f;
+    private float originMoveSpeed = 7f;
+    private float currentMoveSpeed;
+
     private float mouseMaxX = 4f;
     private float mouseMinX = -4f;
     public float moveMaxX = 3f;
@@ -22,25 +25,25 @@ public class PlayerController : MonoBehaviour
 
     public GameObject lifePrefab;
     public TextMeshPro lifeText;
-    private int currentlife = 0;
+    private int playerLife = 0;
+    private int afterLife = 0;
     private float lifeInterverPosY = 0.5f;
+    private List<GameObject> currentTailList = new List<GameObject>();
 
     private float feverColorType = 0;
 
     private Vector2 playerOriginSize;
     private float crushPushTime = 0.0f;
 
-    private List<GameObject> moveLifeList = new List<GameObject>();
-    private Stack<GameObject> currentlifeStack = new Stack<GameObject>();
-
     private void Start()
     {
         playerOriginSize = playerCharacter.transform.localScale;
         playerCharacterRender = playerCharacter.GetComponent<MeshRenderer>();
 
-        currentlife++;
-        currentlifeStack.Push(gameObject);
-        moveLifeList.Add(gameObject);
+        playerLife++;
+        currentTailList.Add(gameObject);
+
+        currentMoveSpeed = originMoveSpeed;
 
         AddLife(WaveMgr.Instance.BlockData.playerLife - 1);
     }
@@ -55,7 +58,7 @@ public class PlayerController : MonoBehaviour
         PlayerMove();
         PlayerCrush();
         PlayerFever();
-        TailMove();
+        TailManagement();
     }
 
     private void PlayerLerpPos()
@@ -80,7 +83,7 @@ public class PlayerController : MonoBehaviour
 
     private void PlayerMove()
     {
-        transform.position = Vector2.Lerp(transform.position, movementPos, Time.deltaTime * moveSpeed);
+        transform.position = Vector2.Lerp(transform.position, movementPos, Time.deltaTime * currentMoveSpeed);
         transform.position = new Vector2(Mathf.Clamp(transform.position.x, moveMinX, moveMaxX), -1f);
     }
 
@@ -100,6 +103,8 @@ public class PlayerController : MonoBehaviour
     {
         if (GameMgr.Instance.GameLogic.feverTime > 0)
         {
+            currentMoveSpeed = originMoveSpeed + GameConfig.FEVER_UP;
+
             feverColorType += Time.deltaTime;
             int idx = (int)Mathf.Floor(feverColorType);
 
@@ -112,56 +117,58 @@ public class PlayerController : MonoBehaviour
 
         else
         {
+            currentMoveSpeed = originMoveSpeed;
             playerCharacterRender.material.color = Color.Lerp(playerCharacterRender.material.color, Color.white, 0.2f);
         }
     }
 
-    private void TailMove()
+    private void TailManagement()
     {
-        for (int i = moveLifeList.Count - 1; i > 0; i--)
+        //Tail Add
+        if (afterLife > 0)
         {
-            if (moveLifeList[i])
+            for (int i = 0; i < afterLife; i++)
             {
-                float moveToPosX = moveLifeList[i - 1].transform.position.x;
-                float moveToPosY = moveLifeList[i].transform.position.y;
-                Vector2 moveToPos = new Vector2(moveToPosX, moveToPosY);
+                playerLife++;
 
-                moveLifeList[i].transform.position = Vector2.Lerp(moveLifeList[i].transform.position, moveToPos, Time.deltaTime * moveSpeed * 1.5f);
+                GameObject lifeObj = ObjectPoolMgr.Instance.Load<Transform>(PoolObjectType.Player, "LifeTail").gameObject;
+                lifeObj.transform.position = currentTailList[currentTailList.Count - 1].transform.position + (Vector3.down * lifeInterverPosY);
+
+                currentTailList.Add(lifeObj);
             }
-            else
-            {
-                moveLifeList.RemoveAt(i);
-            }
+        }
+
+        //Tail Remove
+        else if(afterLife < 0)
+        {
+            playerLife--;
+            ObjectPoolMgr.Instance.ReleasePool(currentTailList[currentTailList.Count - 1]);
+
+            currentTailList.RemoveAt(currentTailList.Count - 1);
+        }
+
+        afterLife = 0;
+        lifeText.text = playerLife.ToString();
+
+        //Tail Move
+        for (int i = currentTailList.Count - 1; i > 0; i--)
+        {
+            float moveToPosX = currentTailList[i - 1].transform.position.x;
+            float moveToPosY = currentTailList[i].transform.position.y;
+            Vector2 moveToPos = new Vector2(moveToPosX, moveToPosY);
+
+            currentTailList[i].transform.position = Vector2.Lerp(currentTailList[i].transform.position, moveToPos, Time.deltaTime * currentMoveSpeed * 1.5f);
         }
     }
 
     public void AddLife(int life)
     {
-        for (int i = 0; i < life; i++)
-        {
-            currentlife++;
-
-            GameObject lifeObj = Instantiate(lifePrefab);
-            lifeObj.transform.position = currentlifeStack.Peek().transform.position + (Vector3.down * lifeInterverPosY);
-
-            moveLifeList.Add(lifeObj);
-            currentlifeStack.Push(lifeObj);
-        }
-
-        lifeText.text = currentlife.ToString();
+        afterLife += life;
     }
 
     public void RemoveLife()
     {
-        if (currentlifeStack.TryPop(out var lifeObj))
-        {
-            currentlife--;
-
-            lifeText.text = currentlife.ToString();
-            Destroy(lifeObj);
-        }
-        else
-            Debug.Log("Game Over");
+        afterLife--;
     }
 
     private void OnCollisionEnter2D(Collision2D other)
