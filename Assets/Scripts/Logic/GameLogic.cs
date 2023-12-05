@@ -95,6 +95,7 @@ public class GameLogic : MonoBehaviour
         titleUi.SetActive(false);
         gameUi.SetActive(true);
 
+        SocketClient.Instance.Init();
         GameMgr.Instance.GameStart(ObjectPoolMgr.Instance.Load<PlayerController>(PoolObjectType.Player, "Player"));
     }
 
