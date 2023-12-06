@@ -15,7 +15,6 @@ public class GameLogic : MonoBehaviour
     [Header("Fever Event")]
     public bool isFever = false;
     public float feverTime = 0.0f;
-    public PlayerController playerPrefab;
     public BackgroundController bgController;
 
     [Header("WaveSpawn")]
@@ -64,7 +63,6 @@ public class GameLogic : MonoBehaviour
         //wave Up
         if (currentWaveList.Count > 0 && waveUpCount > 0)
         {
-            Debug.Log("Block Knock");
             WaveUp();
             waveUpCount = 0;
         }
@@ -95,7 +93,6 @@ public class GameLogic : MonoBehaviour
         titleUi.SetActive(false);
         gameUi.SetActive(true);
 
-        SocketClient.Instance.Init();
         GameMgr.Instance.GameStart(ObjectPoolMgr.Instance.Load<PlayerController>(PoolObjectType.Player, "Player"));
     }
 

@@ -21,9 +21,9 @@ public class TitleLogic : MonoBehaviour
     public bool isErrorDisconnet = false;
     public bool canClick = true;
 
-    public Action onConnectionUnSub = null;
-    public Action onDisConnectionUnSub = null;
-    public Action onErrorUnSub = null;
+    public static Action onConnectionUnSub = null;
+    public static Action onDisConnectionUnSub = null;
+    public static Action onErrorUnSub = null;
 
     private void Awake()
     {
@@ -39,5 +39,19 @@ public class TitleLogic : MonoBehaviour
         {
 
         };
+
+        WebNetworkMgr.Instance.RequestToken();
+    }
+
+    public void GameStart()
+    {
+        NetworkMgr.Instance.OnConnect(GetGameData);
+    }
+
+    private void GetGameData()
+    {
+        GameStartReqDto gameStartReqDto = new();
+
+        NetworkMgr.Instance.SendStartGame(gameStartReqDto);
     }
 }

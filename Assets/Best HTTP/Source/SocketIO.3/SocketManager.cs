@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 using BestHTTP.SocketIO3.Transports;
 using BestHTTP.Extensions;
@@ -405,7 +406,7 @@ namespace BestHTTP.SocketIO3
                 return;
             }
 
-            Random rand = new Random();
+            System.Random rand = new System.Random();
 
             int delay = (int)Options.ReconnectionDelay.TotalMilliseconds * ReconnectAttempts;
 

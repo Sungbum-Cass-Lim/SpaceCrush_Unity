@@ -211,7 +211,7 @@ GameObject:
   - component: {fileID: 44264933}
   - component: {fileID: 44264934}
   m_Layer: 0
-  m_Name: SocketClient
+  m_Name: NetworkMgr
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -241,20 +241,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 44264932}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a437210b91cef2f419eb769c2e950256, type: 3}
+  m_Script: {fileID: 11500000, guid: 8c42354dfb3430446b686f091fe49de7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetGame: coin
-  isDisconnected: 0
-  preAskTime: 0
-  sockectState: 0
-  joinType: 0
-  isRejoinEnd: 0
-  save_userUidForFin: 0
-  pingCount: 0
-  isSync: 0
-  isFocusOut: 0
-  queueCount: 0
 --- !u!1 &70430204
 GameObject:
   m_ObjectHideFlags: 0
@@ -424,6 +413,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 95184660}
   m_CullTransparentMesh: 1
+--- !u!1 &99898425
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 99898426}
+  - component: {fileID: 99898427}
+  m_Layer: 0
+  m_Name: WebNetworkMgr
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &99898426
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 99898425}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 952956044}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &99898427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 99898425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0ac08ed7278fb14a8bfeded22efa13c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &117514205
 GameObject:
   m_ObjectHideFlags: 0
@@ -473,7 +506,6 @@ MonoBehaviour:
   ScoreText: {fileID: 1330398605}
   isFever: 0
   feverTime: 0
-  playerPrefab: {fileID: 4641627432835457173, guid: 80be2ff95c0db2b4ea1453703775e6e3, type: 3}
   bgController: {fileID: 1616843600}
   currentWaveList: []
   MaxSpawnWave: 2
@@ -565,8 +597,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 117514207}
-        m_TargetAssemblyTypeName: GameLogic, Assembly-CSharp
+      - m_Target: {fileID: 1761406810}
+        m_TargetAssemblyTypeName: TitleLogic, Assembly-CSharp
         m_MethodName: GameStart
         m_Mode: 1
         m_Arguments:
@@ -5849,6 +5881,7 @@ Transform:
   - {fileID: 1081202554}
   - {fileID: 44264933}
   - {fileID: 1742273450}
+  - {fileID: 99898426}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6703,8 +6736,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 035035b7843263149911dce2438cd4c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isUserDataDequeue: 1
-  isPlay: 0
 --- !u!1 &1761406807
 GameObject:
   m_ObjectHideFlags: 0
