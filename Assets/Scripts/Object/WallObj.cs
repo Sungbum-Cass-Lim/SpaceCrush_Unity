@@ -9,8 +9,10 @@ public class WallObj : WaveContent
     public List<GameObject> wallType = new List<GameObject>();
     private int currentType = 0;
 
-    public void Initialize()
+    public void Initialize(ContentType type)
     {
+        contentType = type;
+
         wallType[currentType].SetActive(false);
 
         currentType = Random.Range(0, wallType.Count);

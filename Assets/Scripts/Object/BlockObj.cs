@@ -16,17 +16,19 @@ public class BlockObj : WaveContent
 
     public GameObject blockBurstPrefab;
 
-    public void Initialize(int lifeValue, int hasFever)
+    public void Initialize(int index, ContentType type, int lifeValue, int hasFever)
     {
+        this.index = index;
+        contentType = type;
         isFeverBlock = false;
+
+        life = lifeValue;
+        lifeText.text = this.life.ToString();
 
         DefultBlock.SetActive(true);
         FeverBlcok.SetActive(false);
 
-        this.life = lifeValue;
-        lifeText.text = this.life.ToString();
-
-        if(hasFever > 0)
+        if (hasFever > 0)
         {
             isFeverBlock = true;
 
@@ -37,7 +39,9 @@ public class BlockObj : WaveContent
 
     protected override void OnTouch()
     {
-        if(GameMgr.Instance.GameLogic.isFever)
+        UploadCrushData();
+
+        if (GameMgr.Instance.GameLogic.isFever)
         {
             GameMgr.Instance.GameScore += life;
             DeleteEvent.Invoke();
@@ -71,5 +75,65 @@ public class BlockObj : WaveContent
 
         Destroy(burstEffect, 1.0f);
         parentWave.ContentRelease(this);
+    }
+
+    private void UploadCrushData()
+    {
+        if(GameMgr.Instance.GameLogic.isFever == true)
+        {
+            if (contentType == ContentType.Block)
+            {
+                if (isFeverBlock)
+                {
+                    WaveMgr.Instance.UploadData(index, life, 7);
+                }
+                else
+                {
+                    WaveMgr.Instance.UploadData(index, life, 6);
+                }
+            }
+            else if (contentType == ContentType.Obstacle)
+            {
+                WaveMgr.Instance.UploadData(index, life, 8);
+            }
+        }
+
+        else if (life > 1)
+        {
+            if (contentType == ContentType.Block)
+            {
+                if (isFeverBlock)
+                {
+                    WaveMgr.Instance.UploadData(index, life, 1);
+                }
+                else
+                {
+                    WaveMgr.Instance.UploadData(index, life, 0);
+                }
+            }
+            else if (contentType == ContentType.Obstacle)
+            {
+                WaveMgr.Instance.UploadData(index, life, 4);
+            }
+        }
+
+        else
+        {
+            if (contentType == ContentType.Block)
+            {
+                if (this.isFeverBlock)
+                {
+                    WaveMgr.Instance.UploadData(index, life, 3);
+                }
+                else
+                {
+                    WaveMgr.Instance.UploadData(index, life, 2);
+                }
+            }
+            else if (contentType == ContentType.Obstacle)
+            {
+                WaveMgr.Instance.UploadData(index, life, 5);
+            }
+        }
     }
 }

@@ -1,14 +1,16 @@
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using Newtonsoft.Json;
 
-public struct ObstaclesData
+public class ObstaclesData
 {
     public float[][] waveList;
     public int[][] obstaclesBoxList;
 }
-public struct BoxData
+public class BoxData
 {
     public int playerLife;
     public int[][] lifeList;
@@ -17,12 +19,11 @@ public struct BoxData
 }
 
 [System.Serializable]
-public struct WaveInfo
+public class WaveInfo : BaseResDto
 {
     public int bestScore;
     public string pid;
     public BoxData boxData;
-    public bool result;
 }
 
 public class WaveMgr : SingletonComponentBase<WaveMgr>
@@ -51,9 +52,28 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
     private int playerLifeIdx = 0;
     private int currentObstacleIdx = 0;
 
+    private int dataLogCount = 0;
+    public int[][] dataLog = new int[10000][];
+
     protected override void InitializeSingleton()
     {
         waveInfos = JsonHelper.ReadJson<WaveInfo>(waveJsonData);
+        Debug.Log("Load Wave Data");
+
+        blockData = waveInfos.boxData;
+        obstaclesData = blockData.obstaclesData;
+
+        //blockSize와 여백 구하는 공식(ScreenWidth / blockImageWidth / fieldWidthCount + 여백 <= 오류 있음)
+        oneblockSize = (Screen.width / 114f / GameConfig.FILED_WIDHT_SIZE) + 0.2f;
+
+        //field Width, Height 최저값/최대값 구하는 공식(오류 있음)
+        widhtBorder = new Vector2(GameConfig.FILED_WIDHT_SIZE / 2 * -oneblockSize, GameConfig.FILED_WIDHT_SIZE / 2 * oneblockSize);
+        heightBorder = new Vector2(GameConfig.FILED_HEIGHT_SIZE / 2 * -oneblockSize, GameConfig.FILED_HEIGHT_SIZE / 2 * oneblockSize);
+    }
+
+    public void Initilize(string waveInfo)
+    {
+        waveInfos = JsonUtility.FromJson<WaveInfo>(waveInfo);
         Debug.Log("Load Wave Data");
 
         blockData = waveInfos.boxData;
@@ -81,10 +101,11 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
 
             Vector2 SpawnPos = new Vector2(widhtBorder.x + oneblockSize * i, heightBorder.y + Random.Range(-0.2f, 0.2f));
 
+            int blockIndex = blockData.boxList[currentblockIdx][0];
             int blockLife = BlockData.boxList[currentblockIdx][1];
             int blockHasFever = BlockData.boxList[currentblockIdx][3];
 
-            WaveContent block = GenerateBlock(SpawnPos, blockLife, blockHasFever);
+            WaveContent block = GenerateBlock(SpawnPos, blockIndex, ContentType.Block, blockLife, blockHasFever);
             block.transform.SetParent(wave.transform);
 
             block.parentWave = wave;
@@ -104,9 +125,11 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
                 field[(int)blankPos.y, (int)blankPos.x] = 1;
 
                 Vector2 spawnPos = new Vector2(widhtBorder.x + blankPos.x * oneblockSize, heightBorder.y - blankPos.y * oneblockSize);
+
+                int blockIndex = blockData.boxList[currentObstacleIdx][0];
                 int blockLife = ObstaclesData.obstaclesBoxList[currentObstacleIdx][1];
 
-                WaveContent blockObstacle = GenerateBlock(spawnPos, blockLife);
+                WaveContent blockObstacle = GenerateBlock(spawnPos, blockIndex, ContentType.Obstacle, blockLife);
                 blockObstacle.transform.SetParent(wave.transform);
 
                 wave.WaveContentAdd(blockObstacle);
@@ -136,7 +159,10 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
 
             Vector2 spawnPos = new Vector2(widhtBorder.x + blankPos.x * oneblockSize, heightBorder.y - blankPos.y * oneblockSize);
 
-            WaveContent life = GenerateLife(spawnPos, blockData.lifeList[playerLifeIdx][1]);
+            int lifeIndex = blockData.lifeList[playerLifeIdx][0];
+            int lifeValue = blockData.lifeList[playerLifeIdx][1];
+
+            WaveContent life = GenerateLife(spawnPos, lifeIndex, lifeValue);
             life.transform.SetParent(wave.transform);
 
             wave.WaveContentAdd(life);
@@ -148,20 +174,20 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
         return wave;
     }
 
-    private WaveContent GenerateBlock(Vector2 pos, int lifeValue, int hasFever = 0)
+    private WaveContent GenerateBlock(Vector2 pos, int index, ContentType type, int lifeValue, int hasFever = 0)
     {
         BlockObj block = ObjectPoolMgr.Instance.Load<BlockObj>(PoolObjectType.Wave, "Block");
         block.transform.position = pos;
-        block.Initialize(lifeValue, hasFever);
+        block.Initialize(index, type, lifeValue, hasFever);
 
         return block;
     }
 
-    private WaveContent GenerateLife(Vector2 pos, int lifeValue)
+    private WaveContent GenerateLife(Vector2 pos, int index, int lifeValue)
     {
         LifeObj life = ObjectPoolMgr.Instance.Load<LifeObj>(PoolObjectType.Wave, "Life");
         life.transform.position = pos;
-        life.Initialize(lifeValue);
+        life.Initialize(index, ContentType.Life, lifeValue);
 
         return life;
     }
@@ -178,7 +204,7 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
                 if (field[iy, ix] == 1 && Random.Range(0f, 1f) <= 0.2f)
                 {
                     WallObj wall = ObjectPoolMgr.Instance.Load<WallObj>(PoolObjectType.Wave, "Wall");
-                    wall.Initialize();
+                    wall.Initialize(ContentType.Wall);
 
                     Vector2 spawnPos = new Vector2((widhtBorder.x + ix * oneblockSize) + (oneblockSize / 2), (heightBorder.y - iy * oneblockSize) - oneblockSize - 0.3f);
                     wall.transform.position = spawnPos;
@@ -204,5 +230,31 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
             if (field[randPosY, randPosX] == 0)
                 return new Vector2(randPosX, randPosY);
         }
+    }
+
+    public void UploadData(int index, int value, int type)
+    {
+        dataLog.AddJaggedArray(dataLogCount, index, value, type);
+        dataLogCount++;
+    }
+
+    public void TestFunc()
+    {
+        Debug.Log("Log Printing..");
+
+        GameEndReqDto endReq = new();
+
+        endReq.score = GameMgr.Instance.GameScore;
+        endReq.totalCollisionData = new int[dataLogCount][];
+        //endReq.totalCollisionData = dataLog.Where((arr, i) => i != null).Select(arr => arr.Where((item, i) => true).ToArray()).ToArray();
+
+        endReq.uid = UserManager.Instance.userInfo.uid;
+        endReq.tid = UserManager.Instance.userInfo.tid;
+        endReq.gameId = UserManager.Instance.userInfo.gameId;
+        endReq.pid = UserManager.Instance.userInfo.pid;
+        endReq.token = UserManager.Instance.userInfo.token;
+
+        Debug.Log(JsonConvert.SerializeObject(endReq).ToString());
+        Debug.Log(JsonConvert.SerializeObject(dataLog.Where((arr, i) => i == null).Select(arr => arr.Where((item, i) => true).ToArray()).ToArray()).ToString());
     }
 }

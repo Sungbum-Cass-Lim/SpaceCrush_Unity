@@ -22,10 +22,17 @@ public class GameCollisionReqDto : BaseReqDto
     public int score;
 }
 
+public class GameStartReqDto : BaseReqDto { }
+
+//GameStartResDto는 WaveManager의 WaveInfo형식으로 대체 => WaveMgr.cs로 이동해 참고
+
 public class GameEndReqDto : BaseReqDto
 {
     public int score;
-    public int[] totalCollisionData;
+    public int[][] totalCollisionData;
+}
+public class GameEndResDto : BaseResDto 
+{
+    public int score;
 }
 
-public class GameStartReqDto : BaseReqDto { }

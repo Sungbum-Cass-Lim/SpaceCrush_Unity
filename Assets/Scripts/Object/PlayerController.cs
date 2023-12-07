@@ -25,7 +25,6 @@ public class PlayerController : MonoBehaviour
 
     public TextMeshPro lifeText;
     private int playerLife = 0;
-    private int afterLife = 0;
     private float lifeInterverPosY = 0.5f;
     private List<GameObject> currentTailList = new List<GameObject>();
 
@@ -44,7 +43,7 @@ public class PlayerController : MonoBehaviour
 
         currentMoveSpeed = originMoveSpeed;
 
-        AddLife(150);//WaveMgr.Instance.BlockData.playerLife - 1);
+        AddLife(WaveMgr.Instance.BlockData.playerLife - 1);
     }
 
     private void Update()
@@ -57,7 +56,7 @@ public class PlayerController : MonoBehaviour
         PlayerMove();
         PlayerCrush();
         PlayerFever();
-        TailManagement();
+        TailMove();
     }
 
     private void PlayerLerpPos()
@@ -121,34 +120,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void TailManagement()
+    private void TailMove()
     {
-        //Tail Add
-        if (afterLife > 0)
-        {
-            for (int i = 0; i < afterLife; i++)
-            {
-                playerLife++;
-
-                GameObject lifeObj = ObjectPoolMgr.Instance.Load<Transform>(PoolObjectType.Player, "LifeTail").gameObject;
-                lifeObj.transform.position = currentTailList[currentTailList.Count - 1].transform.position + (Vector3.down * lifeInterverPosY);
-
-                currentTailList.Add(lifeObj);
-            }
-        }
-
-        //Tail Remove
-        else if(afterLife < 0)
-        {
-            playerLife--;
-            ObjectPoolMgr.Instance.ReleasePool(currentTailList[currentTailList.Count - 1]);
-
-            currentTailList.RemoveAt(currentTailList.Count - 1);
-        }
-
-        afterLife = 0;
-        lifeText.text = playerLife.ToString();
-
         //Tail Move
         for (int i = currentTailList.Count - 1; i > 0; i--)
         {
@@ -160,14 +133,44 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public int GetLife()
+    {
+        return playerLife;
+    }
+
     public void AddLife(int life)
     {
-        afterLife += life;
+        for (int i = 0; i < life; i++)
+        {
+            playerLife++;
+
+            GameObject lifeObj = ObjectPoolMgr.Instance.Load<Transform>(PoolObjectType.Player, "LifeTail").gameObject;
+            lifeObj.transform.position = currentTailList[currentTailList.Count - 1].transform.position + (Vector3.down * lifeInterverPosY);
+
+            currentTailList.Add(lifeObj);
+        }
+
+        lifeText.text = playerLife.ToString();
     }
 
     public void RemoveLife()
     {
-        afterLife--;
+        playerLife--;
+
+        //TODO: Player 종료 지점 처리 구현 필요
+        if (playerLife <= 0)
+        {
+            WaveMgr.Instance.TestFunc();
+            ObjectPoolMgr.Instance.ReleasePool(gameObject);
+
+            return;
+        }
+
+        ObjectPoolMgr.Instance.ReleasePool(currentTailList[currentTailList.Count - 1]);
+        
+        currentTailList.RemoveAt(currentTailList.Count - 1);
+
+        lifeText.text = playerLife.ToString();
     }
 
     private void OnCollisionEnter2D(Collision2D other)

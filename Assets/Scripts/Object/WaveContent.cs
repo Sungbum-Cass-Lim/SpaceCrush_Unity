@@ -6,14 +6,17 @@ using UnityEngine;
 public enum ContentType
 {
     Block,
+    Obstacle,
     Life,
     Wall,
 }
 
 public abstract class WaveContent : MonoBehaviour
 {
-    public ContentType contentType;
     public WaveObj parentWave;
+
+    public ContentType contentType;
+    protected int index;
 
     public Action TouchEvent;
     public Action DeleteEvent;

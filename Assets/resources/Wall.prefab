@@ -167,8 +167,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abec0e27b41d0ce44832c2aae8bff376, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  contentType: 2
   parentWave: {fileID: 0}
+  contentType: 3
   wallType:
   - {fileID: 1286571519728872341}
   - {fileID: 2132672686020690932}

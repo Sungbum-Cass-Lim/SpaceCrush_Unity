@@ -303,9 +303,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbd891715d67d7942b1780fb92908355, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  contentType: 1
+  parentWave: {fileID: 0}
+  contentType: 2
   lifeText: {fileID: 2734580864480703001}
-  life: 0
 --- !u!61 &3663179438006754686
 BoxCollider2D:
   m_ObjectHideFlags: 0
