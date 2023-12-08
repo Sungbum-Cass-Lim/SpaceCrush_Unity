@@ -9,7 +9,7 @@ using BestHTTP.Authentication;
 
 public class NetworkMgr : SingletonComponentBase<NetworkMgr>
 {
-    private const string address = "ws://127.0.0.1:4001/socket.io/spacecrush";//socket.io";
+    private const string address = "ws://127.0.0.1:4001/spacecrush/socket.io";
 
     private SocketManager serverManager;
     private Socket serverSocket;
@@ -23,16 +23,18 @@ public class NetworkMgr : SingletonComponentBase<NetworkMgr>
         SocketOptions options = new SocketOptions();
 
         options.ConnectWith = TransportTypes.WebSocket;
-        options.AutoConnect = true;
+        options.AutoConnect = false;
 
         options.Auth = (serverManager, serverSocket) => new { uid = 9, appVersion = "1.0.7", appName = "SpaceCrush", token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtaW5uaW1vZSIsInRpZCI6Mjg3MjgsInVpZCI6OSwiaWF0IjoxNjY4NjY2MTcyLCJleHAiOjE2Njg3NTI1NzIsImF1ZCI6ImRldi50b3VybmFtZW50LnBsYXlkYXBwLmNvbSIsImlzcyI6InBsYXlkYXBwLmNvbSJ9.o9A98im67vkk0f-r0QcDOHSWT1CxNUhx9XQAZqUyYbs" };
 
-        serverManager = new SocketManager(new Uri("ws://127.0.0.1:4001/spacecrush/socket.io"), options);
+        serverManager = new SocketManager(new Uri(address), options);
         serverSocket = serverManager.GetSocket("/");
-
+        
         InitCallBack();
 
-        connetCallBack = _connectCallBack; 
+        connetCallBack = _connectCallBack;
+
+        serverManager.Open();
     }
 
     private void InitCallBack()
@@ -53,43 +55,28 @@ public class NetworkMgr : SingletonComponentBase<NetworkMgr>
         {
             Debug.Log($"Error msg: {resp.message}");
         });
-
-        serverSocket.On<string>("StartGame", (waveInfo) => 
-        {
-            ResponseStartGame(waveInfo);
-        });
-
-        serverSocket.On<string>("EndGame", (endRes) => 
-        {
-            ResponseEndGame(endRes);
-        });
     }
 
     public void RequestStartGame(GameStartReqDto data)
     {
-        Send("StartGame", data);
-
-        //TODO: Server에서 JsonData 받아오기 전 까지 임시 GameStart
-        GameMgr.Instance.GameLogic.GameStart();
+        Send<string>("StartGame", data, ResponseStartGame);
     }
     public void ResponseStartGame(string res)
     {
         WaveMgr.Instance.Initilize(res);
-
-        //TODO: Server에서 JsonData 받아 올 수 있을 시 활성화
-        //GameMgr.Instance.GameLogic.GameStart();
+        GameMgr.Instance.GameLogic.GameStart();
     }
 
     public void RequestEndGame(GameEndReqDto data)
     {
-        Send("EndGame", data);
+        //Send("EndGame", data);
     }
     public void ResponseEndGame(string res)
     {
         GameEndResDto endRes = JsonUtility.FromJson<GameEndResDto>(res);
     }
 
-    private void Send(string message, BaseReqDto data)
+    private void Send<T>(string message, BaseReqDto data, Action<T>? callBack)
     {
         UserInfo user = UserManager.Instance.userInfo;
 
@@ -103,7 +90,9 @@ public class NetworkMgr : SingletonComponentBase<NetworkMgr>
 
         Debug.Log($"[Send : {message}] => " + jsonData);
 
-        //TODO: 암호화 제거 후 활성화
-        //serverSocket.Emit(message, jsonData);
+        if (callBack != null)
+            serverSocket.EmitCallBack(callBack, message, jsonData);
+        else
+            serverSocket.Emit(message, jsonData);
     }
 }

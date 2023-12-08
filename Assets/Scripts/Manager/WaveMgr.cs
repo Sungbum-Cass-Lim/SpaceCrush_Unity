@@ -19,11 +19,12 @@ public class BoxData
 }
 
 [System.Serializable]
-public class WaveInfo : BaseResDto
+public class WaveInfo
 {
     public int bestScore;
     public string pid;
     public BoxData boxData;
+    public bool result = false;
 }
 
 public class WaveMgr : SingletonComponentBase<WaveMgr>
@@ -55,25 +56,12 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
     private int dataLogCount = 0;
     public int[][] dataLog = new int[10000][];
 
-    protected override void InitializeSingleton()
-    {
-        waveInfos = JsonHelper.ReadJson<WaveInfo>(waveJsonData);
-        Debug.Log("Load Wave Data");
-
-        blockData = waveInfos.boxData;
-        obstaclesData = blockData.obstaclesData;
-
-        //blockSize와 여백 구하는 공식(ScreenWidth / blockImageWidth / fieldWidthCount + 여백 <= 오류 있음)
-        oneblockSize = (Screen.width / 114f / GameConfig.FILED_WIDHT_SIZE) + 0.2f;
-
-        //field Width, Height 최저값/최대값 구하는 공식(오류 있음)
-        widhtBorder = new Vector2(GameConfig.FILED_WIDHT_SIZE / 2 * -oneblockSize, GameConfig.FILED_WIDHT_SIZE / 2 * oneblockSize);
-        heightBorder = new Vector2(GameConfig.FILED_HEIGHT_SIZE / 2 * -oneblockSize, GameConfig.FILED_HEIGHT_SIZE / 2 * oneblockSize);
-    }
+    protected override void InitializeSingleton(){}
 
     public void Initilize(string waveInfo)
     {
-        waveInfos = JsonUtility.FromJson<WaveInfo>(waveInfo);
+        TextAsset info = new TextAsset(waveInfo);
+        waveInfos = JsonHelper.ReadJson<WaveInfo>(info);
         Debug.Log("Load Wave Data");
 
         blockData = waveInfos.boxData;
@@ -234,7 +222,7 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
 
     public void UploadData(int index, int value, int type)
     {
-        dataLog.AddJaggedArray(dataLogCount, index, value, type);
+        dataLog.Add(dataLogCount, index, value, type);
         dataLogCount++;
     }
 
@@ -246,7 +234,7 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
 
         endReq.score = GameMgr.Instance.GameScore;
         endReq.totalCollisionData = new int[dataLogCount][];
-        //endReq.totalCollisionData = dataLog.Where((arr, i) => i != null).Select(arr => arr.Where((item, i) => true).ToArray()).ToArray();
+        endReq.totalCollisionData = dataLog.Slice(dataLogCount);
 
         endReq.uid = UserManager.Instance.userInfo.uid;
         endReq.tid = UserManager.Instance.userInfo.tid;
@@ -255,6 +243,5 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
         endReq.token = UserManager.Instance.userInfo.token;
 
         Debug.Log(JsonConvert.SerializeObject(endReq).ToString());
-        Debug.Log(JsonConvert.SerializeObject(dataLog.Where((arr, i) => i == null).Select(arr => arr.Where((item, i) => true).ToArray()).ToArray()).ToString());
     }
 }
