@@ -24,7 +24,26 @@ public class GameCollisionReqDto : BaseReqDto
 
 public class GameStartReqDto : BaseReqDto { }
 
-//GameStartResDto는 WaveManager의 WaveInfo형식으로 대체 => WaveMgr.cs로 이동해 참고
+#region GameStartResDto
+public class ObstaclesData
+{
+    public float[][] waveList;
+    public int[][] obstaclesBoxList;
+}
+public class BoxData
+{
+    public int playerLife;
+    public int[][] lifeList;
+    public int[][] boxList;
+    public ObstaclesData obstaclesData;
+}
+public class GameStartResDto : BaseResDto
+{
+    public int bestScore;
+    public string pid;
+    public BoxData boxData;
+}
+#endregion
 
 public class GameEndReqDto : BaseReqDto
 {

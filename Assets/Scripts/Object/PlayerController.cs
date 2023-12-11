@@ -160,9 +160,8 @@ public class PlayerController : MonoBehaviour
         //TODO: Player 종료 지점 처리 구현 필요
         if (playerLife <= 0)
         {
-            WaveMgr.Instance.TestFunc();
             ObjectPoolMgr.Instance.ReleasePool(gameObject);
-
+            WaveMgr.Instance.SendLog();
             return;
         }
 

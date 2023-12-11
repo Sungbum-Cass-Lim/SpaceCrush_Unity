@@ -20,7 +20,7 @@ public class LifeObj : WaveContent
     protected override void OnTouch()
     {
         GameMgr.Instance.Player.AddLife(life);
-        WaveMgr.Instance.UploadData(index, GameMgr.Instance.Player.GetLife(), 9);
+        WaveMgr.Instance.UploadLog(index, GameMgr.Instance.Player.GetLife(), 9);
 
         gameObject.SetActive(false);
     }

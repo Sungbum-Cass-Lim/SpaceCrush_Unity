@@ -5,33 +5,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Newtonsoft.Json;
 
-public class ObstaclesData
-{
-    public float[][] waveList;
-    public int[][] obstaclesBoxList;
-}
-public class BoxData
-{
-    public int playerLife;
-    public int[][] lifeList;
-    public int[][] boxList;
-    public ObstaclesData obstaclesData;
-}
-
-[System.Serializable]
-public class WaveInfo
-{
-    public int bestScore;
-    public string pid;
-    public BoxData boxData;
-    public bool result = false;
-}
-
 public class WaveMgr : SingletonComponentBase<WaveMgr>
 {
-    #region WaveInfo
-    public TextAsset waveJsonData;
-    WaveInfo waveInfos;
+    GameStartResDto waveInfos;
 
     //한 번 받고 수정 할 일 없음
     private BoxData blockData;
@@ -39,7 +15,6 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
 
     private ObstaclesData obstaclesData;
     public ObstaclesData ObstaclesData { get { return obstaclesData; } }
-    #endregion
 
     public int[,] field = new int[GameConfig.FILED_HEIGHT_SIZE, GameConfig.FILED_WIDHT_SIZE];
 
@@ -54,14 +29,14 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
     private int currentObstacleIdx = 0;
 
     private int dataLogCount = 0;
-    public int[][] dataLog = new int[10000][];
+    private int[][] dataLog = new int[10000][];
 
     protected override void InitializeSingleton(){}
 
-    public void Initilize(string waveInfo)
+    public void Initilize(string GameStartResDto)
     {
-        TextAsset info = new TextAsset(waveInfo);
-        waveInfos = JsonHelper.ReadJson<WaveInfo>(info);
+        TextAsset info = new TextAsset(GameStartResDto);
+        waveInfos = JsonHelper.ReadJson<GameStartResDto>(info);
         Debug.Log("Load Wave Data");
 
         blockData = waveInfos.boxData;
@@ -220,28 +195,19 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
         }
     }
 
-    public void UploadData(int index, int value, int type)
+    public void UploadLog(int index, int value, int type)
     {
         dataLog.Add(dataLogCount, index, value, type);
         dataLogCount++;
     }
-
-    public void TestFunc()
+    public void SendLog()
     {
-        Debug.Log("Log Printing..");
-
         GameEndReqDto endReq = new();
 
         endReq.score = GameMgr.Instance.GameScore;
         endReq.totalCollisionData = new int[dataLogCount][];
         endReq.totalCollisionData = dataLog.Slice(dataLogCount);
 
-        endReq.uid = UserManager.Instance.userInfo.uid;
-        endReq.tid = UserManager.Instance.userInfo.tid;
-        endReq.gameId = UserManager.Instance.userInfo.gameId;
-        endReq.pid = UserManager.Instance.userInfo.pid;
-        endReq.token = UserManager.Instance.userInfo.token;
-
-        Debug.Log(JsonConvert.SerializeObject(endReq).ToString());
+        NetworkMgr.Instance.RequestEndGame(endReq);
     }
 }

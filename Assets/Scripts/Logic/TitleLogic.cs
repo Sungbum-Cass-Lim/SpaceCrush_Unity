@@ -10,7 +10,7 @@ public class TitleLogic : MonoBehaviour
         WebNetworkMgr.Instance.RequestToken();
     }
 
-    public void GameStart()
+    public void OnStartButton()
     {
         NetworkMgr.Instance.OnConnect(GetGameData);
     }

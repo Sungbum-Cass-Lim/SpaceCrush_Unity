@@ -599,7 +599,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1761406810}
         m_TargetAssemblyTypeName: TitleLogic, Assembly-CSharp
-        m_MethodName: GameStart
+        m_MethodName: OnStartButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6499,7 +6499,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79af0fe4374a19a4c8b6649f00992635, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waveJsonData: {fileID: 4900000, guid: 284c390c49a10384ca496aa01fd861cb, type: 3}
   oneblockSize: 0
   widhtBorder: {x: 0, y: 0}
   heightBorder: {x: 0, y: 0}

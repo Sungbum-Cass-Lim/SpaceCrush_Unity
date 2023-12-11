@@ -85,16 +85,16 @@ public class BlockObj : WaveContent
             {
                 if (isFeverBlock)
                 {
-                    WaveMgr.Instance.UploadData(index, life, 7);
+                    WaveMgr.Instance.UploadLog(index, life, 7);
                 }
                 else
                 {
-                    WaveMgr.Instance.UploadData(index, life, 6);
+                    WaveMgr.Instance.UploadLog(index, life, 6);
                 }
             }
             else if (contentType == ContentType.Obstacle)
             {
-                WaveMgr.Instance.UploadData(index, life, 8);
+                WaveMgr.Instance.UploadLog(index, life, 8);
             }
         }
 
@@ -104,16 +104,16 @@ public class BlockObj : WaveContent
             {
                 if (isFeverBlock)
                 {
-                    WaveMgr.Instance.UploadData(index, life, 1);
+                    WaveMgr.Instance.UploadLog(index, life, 1);
                 }
                 else
                 {
-                    WaveMgr.Instance.UploadData(index, life, 0);
+                    WaveMgr.Instance.UploadLog(index, life, 0);
                 }
             }
             else if (contentType == ContentType.Obstacle)
             {
-                WaveMgr.Instance.UploadData(index, life, 4);
+                WaveMgr.Instance.UploadLog(index, life, 4);
             }
         }
 
@@ -123,16 +123,16 @@ public class BlockObj : WaveContent
             {
                 if (this.isFeverBlock)
                 {
-                    WaveMgr.Instance.UploadData(index, life, 3);
+                    WaveMgr.Instance.UploadLog(index, life, 3);
                 }
                 else
                 {
-                    WaveMgr.Instance.UploadData(index, life, 2);
+                    WaveMgr.Instance.UploadLog(index, life, 2);
                 }
             }
             else if (contentType == ContentType.Obstacle)
             {
-                WaveMgr.Instance.UploadData(index, life, 5);
+                WaveMgr.Instance.UploadLog(index, life, 5);
             }
         }
     }

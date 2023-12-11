@@ -5,6 +5,7 @@ using UnityEngine;
 using BestHTTP;
 using BestHTTP.SocketIO3;
 using BestHTTP.SocketIO3.Transports;
+using Newtonsoft.Json;
 using BestHTTP.Authentication;
 
 public class NetworkMgr : SingletonComponentBase<NetworkMgr>
@@ -15,7 +16,8 @@ public class NetworkMgr : SingletonComponentBase<NetworkMgr>
     private Socket serverSocket;
 
     private Action connetCallBack;
-    protected override void InitializeSingleton(){}
+
+    protected override void InitializeSingleton() { }
 
     public void OnConnect(Action _connectCallBack)
     {
@@ -29,7 +31,7 @@ public class NetworkMgr : SingletonComponentBase<NetworkMgr>
 
         serverManager = new SocketManager(new Uri(address), options);
         serverSocket = serverManager.GetSocket("/");
-        
+
         InitCallBack();
 
         connetCallBack = _connectCallBack;
@@ -57,26 +59,36 @@ public class NetworkMgr : SingletonComponentBase<NetworkMgr>
         });
     }
 
+    #region Start Communication
     public void RequestStartGame(GameStartReqDto data)
     {
         Send<string>("StartGame", data, ResponseStartGame);
     }
-    public void ResponseStartGame(string res)
+    private void ResponseStartGame(string res)
     {
+        Debug.Log($"[Recv : StartGame] => {res}");
+
         WaveMgr.Instance.Initilize(res);
         GameMgr.Instance.GameLogic.GameStart();
     }
+    #endregion
 
+    #region End Communication
     public void RequestEndGame(GameEndReqDto data)
     {
-        //Send("EndGame", data);
+        Send<string>("EndGame", data, ResponseEndGame);
     }
-    public void ResponseEndGame(string res)
+    private void ResponseEndGame(string res)
     {
+        Debug.Log($"[Recv : EndGame] => {res}");
         GameEndResDto endRes = JsonUtility.FromJson<GameEndResDto>(res);
-    }
 
-    private void Send<T>(string message, BaseReqDto data, Action<T>? callBack)
+        if (endRes.result)
+            GameMgr.Instance.GameOver();
+    }
+    #endregion
+
+    private void Send(string message, BaseReqDto data)
     {
         UserInfo user = UserManager.Instance.userInfo;
 
@@ -86,13 +98,24 @@ public class NetworkMgr : SingletonComponentBase<NetworkMgr>
         data.pid = user.pid;
         data.token = user.token;
 
-        var jsonData = JsonUtility.ToJson(data);
+        var jsonData = JsonConvert.SerializeObject(data);
 
         Debug.Log($"[Send : {message}] => " + jsonData);
+        serverSocket.Emit(message, jsonData);
+    }
+    private void Send<T>(string message, BaseReqDto data, Action<T> callBack)
+    {
+        UserInfo user = UserManager.Instance.userInfo;
 
-        if (callBack != null)
-            serverSocket.EmitCallBack(callBack, message, jsonData);
-        else
-            serverSocket.Emit(message, jsonData);
+        data.uid = user.uid;
+        data.tid = user.tid;
+        data.gameId = user.gameId;
+        data.pid = user.pid;
+        data.token = user.token;
+
+        var jsonData = JsonConvert.SerializeObject(data);
+
+        Debug.Log($"[Send : {message}] => " + jsonData);
+        serverSocket.EmitCallBack(callBack, message, jsonData);
     }
 }
