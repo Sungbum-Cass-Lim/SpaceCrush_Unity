@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour
 
         currentMoveSpeed = originMoveSpeed;
 
-        AddLife(200); //WaveMgr.Instance.BlockData.playerLife - 1);
+        AddLife(WaveMgr.Instance.BlockData.playerLife - 1);
     }
 
     private void Update()

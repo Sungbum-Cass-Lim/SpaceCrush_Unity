@@ -584,7 +584,7 @@ MonoBehaviour:
   feverTime: 0
   bgController: {fileID: 1616843600}
   currentWaveList: []
-  MaxSpawnWave: 5
+  MaxSpawnWave: 2
   originDownSpeed: 8
   currentDownSpeed: 0
   interverValue: 0.8
