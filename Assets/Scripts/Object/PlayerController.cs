@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     private float originMoveSpeed = 7f;
     private float currentMoveSpeed;
 
+    public WallObj CurrentWall;
     private float mouseMaxX = 4f;
     private float mouseMinX = -4f;
     public float moveMaxX = 3f;
@@ -43,7 +44,7 @@ public class PlayerController : MonoBehaviour
 
         currentMoveSpeed = originMoveSpeed;
 
-        AddLife(WaveMgr.Instance.BlockData.playerLife - 1);
+        AddLife(200); //WaveMgr.Instance.BlockData.playerLife - 1);
     }
 
     private void Update()
@@ -191,7 +192,7 @@ public class PlayerController : MonoBehaviour
     {
         if (other.collider.TryGetComponent<WaveContent>(out var Content))
         {
-            if (Content.contentType == ContentType.Wall)
+            if (Content.contentType == ContentType.Wall && Content == CurrentWall)
             {
                 startPlayerPos = transform.position;
                 startMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);

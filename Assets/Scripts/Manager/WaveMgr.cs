@@ -103,7 +103,7 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
             }
 
             //TODO: 벽(하드코딩 변경 필요)
-            if (obstaclesData.waveList[currentWaveIdx][0] > 0.4f)
+            if (obstaclesData.waveList[currentWaveIdx][0] > 0.0f)
             {
                 foreach (var wall in GenerateWall())
                 {
@@ -166,7 +166,7 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
         {
             for (int ix = 0; ix < GameConfig.FILED_WIDHT_SIZE; ++ix)
             {
-                if (field[iy, ix] == 1 && Random.Range(0f, 1f) <= 0.2f)
+                if (field[iy, ix] == 1 && Random.Range(0f, 1f) <= 1.0f)
                 {
                     WallObj wall = ObjectPoolMgr.Instance.Load<WallObj>(PoolObjectType.Wave, "Wall");
                     wall.Initialize(ContentType.Wall);

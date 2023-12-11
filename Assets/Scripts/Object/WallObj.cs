@@ -23,6 +23,8 @@ public class WallObj : WaveContent
     //TODO: Wall스크립트 작성 필요
     protected override void OnTouch()
     {
+        GameMgr.Instance.Player.CurrentWall = this;
+
         //오른쪽 벽
         if (GameMgr.Instance.Player.transform.position.x < transform.position.x)
         {

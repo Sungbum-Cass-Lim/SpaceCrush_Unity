@@ -16,12 +16,6 @@ public class BaseResDto
     public bool result = true;
 }
 
-public class GameCollisionReqDto : BaseReqDto
-{
-    private int[] scoreData;
-    public int score;
-}
-
 public class GameStartReqDto : BaseReqDto { }
 
 #region GameStartResDto
