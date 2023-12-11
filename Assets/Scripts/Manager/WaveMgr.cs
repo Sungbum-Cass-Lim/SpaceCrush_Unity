@@ -7,6 +7,8 @@ using Newtonsoft.Json;
 
 public class WaveMgr : SingletonComponentBase<WaveMgr>
 {
+    public int ScrrenWidth;
+
     GameStartResDto waveInfos;
 
     //한 번 받고 수정 할 일 없음
@@ -43,7 +45,7 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
         obstaclesData = blockData.obstaclesData;
 
         //blockSize와 여백 구하는 공식(ScreenWidth / blockImageWidth / fieldWidthCount + 여백 <= 오류 있음)
-        oneblockSize = (Screen.width / 114f / GameConfig.FILED_WIDHT_SIZE) + 0.2f;
+        oneblockSize = (ScrrenWidth / 114f / GameConfig.FILED_WIDHT_SIZE) + 0.2f;
 
         //field Width, Height 최저값/최대값 구하는 공식(오류 있음)
         widhtBorder = new Vector2(GameConfig.FILED_WIDHT_SIZE / 2 * -oneblockSize, GameConfig.FILED_WIDHT_SIZE / 2 * oneblockSize);
