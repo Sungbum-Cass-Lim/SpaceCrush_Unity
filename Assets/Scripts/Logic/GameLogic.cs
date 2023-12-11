@@ -53,7 +53,7 @@ public class GameLogic : MonoBehaviour
             {
                 wave.rigidbody2d.MovePosition((Vector2)wave.transform.position + (Vector2.down * currentDownSpeed * Time.fixedDeltaTime));
 
-                if(wave.transform.position.y < -10f)
+                if (wave.transform.position.y < -10f)
                 {
                     RemoveWaveStack.Push(wave);
                 }

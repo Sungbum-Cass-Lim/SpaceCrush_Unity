@@ -49,13 +49,13 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         PlayerLerpPos();
+        PlayerCrush();
+        PlayerFever();
     }
 
     void FixedUpdate()
     {
         PlayerMove();
-        PlayerCrush();
-        PlayerFever();
         TailMove();
     }
 
@@ -79,22 +79,18 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void PlayerMove()
-    {
-        transform.position = Vector2.Lerp(transform.position, movementPos, Time.deltaTime * currentMoveSpeed);
-        transform.position = new Vector2(Mathf.Clamp(transform.position.x, moveMinX, moveMaxX), -1f);
-    }
-
     private void PlayerCrush()
     {
         if (crushPushTime > 0)
         {
             crushPushTime -= Time.deltaTime;
-            playerCharacter.transform.localScale = Vector2.Lerp(playerCharacter.transform.localScale, GameConfig.PLAYER_CRUSH_SIZE, 0.2f);
+            playerCharacter.transform.localScale = Vector2.Lerp(playerCharacter.transform.localScale, GameConfig.PLAYER_CRUSH_SIZE, 13 * Time.deltaTime);
         }
         else
-            playerCharacter.transform.localScale = Vector2.Lerp(playerCharacter.transform.localScale, playerOriginSize, 0.2f);
-
+        {
+            crushPushTime = 0;
+            playerCharacter.transform.localScale = Vector2.Lerp(playerCharacter.transform.localScale, playerOriginSize, 13 * Time.deltaTime);
+        }
     }
 
     private void PlayerFever()
@@ -118,6 +114,12 @@ public class PlayerController : MonoBehaviour
             currentMoveSpeed = originMoveSpeed;
             playerCharacterRender.material.color = Color.Lerp(playerCharacterRender.material.color, Color.white, 0.2f);
         }
+    }
+
+    private void PlayerMove()
+    {
+        transform.position = Vector2.Lerp(transform.position, movementPos, Time.deltaTime * currentMoveSpeed);
+        transform.position = new Vector2(Mathf.Clamp(transform.position.x, moveMinX, moveMaxX), -1f);
     }
 
     private void TailMove()
@@ -178,7 +180,8 @@ public class PlayerController : MonoBehaviour
         {
             Content.TouchEvent.Invoke();
 
-            if (Content.contentType == ContentType.Block && GameMgr.Instance.GameLogic.feverTime <= 0)
+            //TODO: 줄일 필요 있음
+            if ((Content.contentType == ContentType.Block || Content.contentType == ContentType.Obstacle) && GameMgr.Instance.GameLogic.feverTime <= 0)
             {
                 crushPushTime = 0.15f;
             }
