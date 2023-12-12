@@ -9,9 +9,6 @@ public class UserInfo
     public string gameId = "";
     public string token = "";
     public string pid = "";
-
-    public int bestScore = 0;
-    public int score = 0;
 }
 
 public class UserManager : SingletonComponentBase<UserManager>

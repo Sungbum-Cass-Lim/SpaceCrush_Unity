@@ -1,6 +1,6 @@
 public static class Config_Local
 {
-    public const string SERVER_URL = "ws://172.16.35.42";
+    public const string SERVER_URL = "ws://172.17.176.1";
     public const string SERVER_PATH = "/spacecrush";
     public const int SERVER_PORT = 4001;
     public static readonly string[] ORIGIN = { "" };

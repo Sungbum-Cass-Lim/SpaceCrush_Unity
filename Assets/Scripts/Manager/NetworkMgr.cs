@@ -10,14 +10,29 @@ using BestHTTP.Authentication;
 
 public class NetworkMgr : SingletonComponentBase<NetworkMgr>
 {
-    private const string address = "ws://127.0.0.1:4001/spacecrush/socket.io";
+    private string address = "";
 
     private SocketManager serverManager;
     private Socket serverSocket;
 
     private Action connetCallBack;
 
-    protected override void InitializeSingleton() { }
+    protected override void InitializeSingleton() 
+    {
+#if !UNITY_EDITOR && UNITY_WEBGL
+#if USE_WEBGL_LOCAL_CASS
+        address = "ws://172.17.176.1:4001/spacecrush/socket.io"; //본점
+#elif USE_WEBGL_DEV
+        address = "https://dev-tournament.playdapp.com/spacecrush/socket.io?entry_currency=" + targetGame;
+#elif USE_WEBGL_QA
+        address = "https://qa-tournament.playdapp.com//spacecrush/socket.io?entry_currency=" + targetGame;
+#elif USE_WEBGL_PROD
+        address = "https://prod-tournament.playdapp.com//spacecrush/socket.io?entry_currency=" + targetGame;
+#endif
+#elif UNITY_EDITOR
+        address = "ws://127.0.0.1:4001/spacecrush/socket.io"; //본점
+#endif
+    }
 
     public void OnConnect(Action _connectCallBack)
     {
@@ -27,7 +42,7 @@ public class NetworkMgr : SingletonComponentBase<NetworkMgr>
         options.ConnectWith = TransportTypes.WebSocket;
         options.AutoConnect = false;
 
-        options.Auth = (serverManager, serverSocket) => new { uid = 9, appVersion = "1.0.7", appName = "SpaceCrush", token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtaW5uaW1vZSIsInRpZCI6Mjg3MjgsInVpZCI6OSwiaWF0IjoxNjY4NjY2MTcyLCJleHAiOjE2Njg3NTI1NzIsImF1ZCI6ImRldi50b3VybmFtZW50LnBsYXlkYXBwLmNvbSIsImlzcyI6InBsYXlkYXBwLmNvbSJ9.o9A98im67vkk0f-r0QcDOHSWT1CxNUhx9XQAZqUyYbs" };
+        options.Auth = (serverManager, serverSocket) => new { uid = UserManager.Instance.userInfo.uid, appVersion = Application.version, appName = Application.productName, token = UserManager.Instance.userInfo.token};
 
         serverManager = new SocketManager(new Uri(address), options);
         serverSocket = serverManager.GetSocket("/");
