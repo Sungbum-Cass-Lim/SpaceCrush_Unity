@@ -165,14 +165,26 @@ public class PlayerController : MonoBehaviour
         {
             ObjectPoolMgr.Instance.ReleasePool(gameObject);
             WaveMgr.Instance.SendLog();
+
             return;
         }
 
+        StartCoroutine(RemoveLifeEffect(currentTailList[currentTailList.Count - 1].transform));
+
         ObjectPoolMgr.Instance.ReleasePool(currentTailList[currentTailList.Count - 1]);
-        
         currentTailList.RemoveAt(currentTailList.Count - 1);
 
         lifeText.text = playerLife.ToString();
+    }
+
+    IEnumerator RemoveLifeEffect(Transform removeLifePos)
+    {
+        Transform removeLifeEffect = ObjectPoolMgr.Instance.Load<Transform>(PoolObjectType.Effect, "LifeTailRemove");
+        removeLifeEffect.position = removeLifePos.position;
+
+        yield return YieldCacheMgr.WaitForSeconds(0.5f);
+
+        ObjectPoolMgr.Instance.ReleasePool(removeLifeEffect.gameObject);
     }
 
     private void OnCollisionEnter2D(Collision2D other)

@@ -59,6 +59,7 @@ public class ObjectPoolMgr : SingletonComponentBase<ObjectPoolMgr>
         IncreasePoolObjectCache(15, PoolObjectType.Wave, "Life");
         IncreasePoolObjectCache(1, PoolObjectType.Player, "Player");
         IncreasePoolObjectCache(100, PoolObjectType.Player, "LifeTail");
+        IncreasePoolObjectCache(50, PoolObjectType.Effect, "LifeTailRemove");
         IncreasePoolObjectCache(10, PoolObjectType.Effect, "SoundComponent");
         IncreasePoolObjectCache(10, PoolObjectType.Effect, "BlockBurst");
     }
