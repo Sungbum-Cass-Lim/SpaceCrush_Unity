@@ -25,7 +25,7 @@ Module.WebEventListener = function (e) {
       break;
     case "onTarget":
     unityInstance.SendMessage(
-        "(SingletonComponent)NetworkManager",
+        "WebNetworkMgr",
         "OnRequestTarget",
         JSON.stringify(message.data)
       );

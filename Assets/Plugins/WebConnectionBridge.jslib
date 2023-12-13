@@ -23,6 +23,7 @@ var jslib = {
         ];
     }
     console.log("init", Data.ORIGIN);
+    console.log("unityInstance", unityInstance);
 
     window.addEventListener("message", unityInstance.Module.WebEventListener);
   },
