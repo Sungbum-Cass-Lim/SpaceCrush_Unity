@@ -15,7 +15,12 @@ public class FpsTest : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+#if USE_WEBGL_STAGE || USE_WEBGL_PROD
+        fpsTxt.gameObject.SetActive(false);
+#else
         ShowField();
+#endif
     }
 
     // Update is called once per frame

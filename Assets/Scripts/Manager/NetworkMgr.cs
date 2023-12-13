@@ -23,11 +23,11 @@ public class NetworkMgr : SingletonComponentBase<NetworkMgr>
 #if USE_WEBGL_LOCAL_CASS
         address = "ws://172.17.176.1:4001/spacecrush/socket.io"; //본점
 #elif USE_WEBGL_DEV
-        address = "https://dev-tournament.playdapp.com/spacecrush/socket.io?entry_currency=" + targetGame;
+        address = "https://dev-tournament.playdapp.com/spacecrush/socket.io";
 #elif USE_WEBGL_QA
-        address = "https://qa-tournament.playdapp.com//spacecrush/socket.io?entry_currency=" + targetGame;
+        address = "https://qa-tournament.playdapp.com//spacecrush/socket.io";
 #elif USE_WEBGL_PROD
-        address = "https://prod-tournament.playdapp.com//spacecrush/socket.io?entry_currency=" + targetGame;
+        address = "https://prod-tournament.playdapp.com//spacecrush/socket.io";
 #endif
 #elif UNITY_EDITOR
         address = "ws://127.0.0.1:4001/spacecrush/socket.io"; //본점

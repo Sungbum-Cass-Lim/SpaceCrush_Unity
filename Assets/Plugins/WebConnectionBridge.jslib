@@ -7,20 +7,19 @@ var jslib = {
     if (UTF8ToString(origin) === "dev") {
       Data.ORIGIN = [
         "https://tournament.dev.playdapp.com",
-        "http://localhost:3005",
         "http://localhost:3000",
       ];
     }
      else if (UTF8ToString(origin) === "qa") {
         Data.ORIGIN = [
           "https://tournament.qa.playdapp.com",
-          "http://localhost:3005",
           "http://localhost:3000",
         ];
     }
      else if (UTF8ToString(origin) === "prod") {
         Data.ORIGIN = [
           "https://tournament.playdapp.com",
+          "https://tournament.staging.playdapp.com",
         ];
     }
     console.log("init", Data.ORIGIN);

@@ -18,7 +18,7 @@ Module.WebEventListener = function (e) {
     case "token":
     case "onToken":
       unityInstance.SendMessage(
-        "(SingletonComponent)NetworkManager",
+        "WebNetworkMgr",
         "OnRequestToken",
         JSON.stringify(message.data)
       );
