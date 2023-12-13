@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,6 +22,14 @@ public class TitleLogic : MonoBehaviour
         startTextColorCorutine = StartCoroutine(StartTextColor());
     }
 
+    private void OnEnable()
+    {
+        WebNetworkMgr.Instance.InitTargetGame(() =>
+        {
+            WebNetworkMgr.Instance.SetLoading(false);
+        });
+    }
+
     IEnumerator StartTextColor()
     {
         yield return null;
@@ -37,7 +46,7 @@ public class TitleLogic : MonoBehaviour
                 if (copyColor.a <= 0)
                     isAdd = true;
             }
-            else if(isAdd == true)
+            else if (isAdd == true)
             {
                 copyColor.a += Time.deltaTime;
 

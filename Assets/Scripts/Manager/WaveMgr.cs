@@ -31,7 +31,7 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
     private int currentObstacleIdx = 0;
 
     private int dataLogCount = 0;
-    private int[][] dataLog = new int[10000][];
+    private int[][] dataLog = new int[20000][];
 
     protected override void InitializeSingleton(){}
 

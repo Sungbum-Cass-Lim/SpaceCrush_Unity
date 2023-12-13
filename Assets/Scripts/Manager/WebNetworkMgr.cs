@@ -60,30 +60,30 @@ public class WebNetworkMgr : SingletonComponentBase<WebNetworkMgr>
 #endif
     }
 
-    //    public void InitTargetGame(Action RequestTargetCallBack)
-    //    {
-    //        this.onRequestTargetCallBack = RequestTargetCallBack;
-    //#if !UNITY_EDITOR
-    //#if USE_WEBGL_DEV
-    //                     initialize("dev");
-    //#elif USE_WEBGL_QA
-    //                     initialize("qa");
-    //#elif USE_WEBGL_STAGE || USE_WEBGL_PROD
-    //                     initialize("prod");
-    //#elif USE_WEBGL_LOCAL_CASS
-    //                onRequestTargetCallBack.Invoke();
-    //#endif
-    //    RequestTarget();
-    //#else
-    //        onRequestTargetCallBack.Invoke();
-    //#endif
+    public void InitTargetGame(Action RequestTargetCallBack)
+    {
+        this.onRequestTargetCallBack = RequestTargetCallBack;
+#if !UNITY_EDITOR
+#if USE_WEBGL_DEV
+                         initialize("dev");
+#elif USE_WEBGL_QA
+                         initialize("qa");
+#elif USE_WEBGL_STAGE || USE_WEBGL_PROD
+                         initialize("prod");
+#elif USE_WEBGL_LOCAL_CASS
+                    onRequestTargetCallBack.Invoke();
+#endif
+        RequestTarget();
+#else
+        onRequestTargetCallBack.Invoke();
+#endif
 
-    //    }
+    }
 
     #region Web Interection
     public void SetLoading(bool show)
     {
-#if !UNITY_EDITOR && UNITY_WEBGL && !USE_WEBGL_LOCAL_RAIN && !USE_WEBGL_LOCAL_ANDERSAN
+#if !UNITY_EDITOR && UNITY_WEBGL && !USE_WEBGL_LOCAL_CASS
         Loading(show);
 #endif
     }
@@ -141,20 +141,10 @@ public class WebNetworkMgr : SingletonComponentBase<WebNetworkMgr>
         }
     }
 
-    //public void OnRequestTarget(string data)
-    //{
-
-    //    var gameTarget = JsonUtility.FromJson<TargetGame>(data);
-
-    //    SocketClient.Instance.targetGame = gameTarget.entryCurrency;
-
-    //    if (SocketClient.Instance.targetGame == "ticket") GameMgr.Instance.gameType = GamePrizeType.Pla;
-    //    else GameMgr.Instance.gameType = GamePrizeType.Gold;
-
-    //    GameMgr.Instance.gameCharge = gameTarget.entryCharge;
-    //    EditorDebug.Log("targetGame :: " + SocketClient.Instance.targetGame);
-    //    onRequestTargetCallBack?.Invoke();
-    //}
+    public void OnRequestTarget(string data)
+    {
+        onRequestTargetCallBack.Invoke();
+    }
 
     //private void OnApplicationQuit()
     //{
