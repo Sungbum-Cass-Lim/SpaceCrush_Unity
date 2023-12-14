@@ -4,7 +4,7 @@ public class BuildInfo
 {
 	public const BuildTarget buildTarget = BuildTarget.WebGL;
 	public const Builder.ReleaseType releaseType = Builder.ReleaseType.Dev;
-	public const string BundleVersion = "2.0.29";
-	public const string BuildDate = "2023-12-14 13:38:22";
+	public const string BundleVersion = "2.0.30";
+	public const string BuildDate = "2023-12-14 13:58:33";
 }
 

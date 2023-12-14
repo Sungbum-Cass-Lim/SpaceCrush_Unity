@@ -21,6 +21,7 @@ Module.WebEventListener = function (e) {
   switch (message.message) 
   {
     case "token":
+    
     case "onToken":
       unityInstance.SendMessage(
         "WebNetworkMgr",
@@ -30,12 +31,20 @@ Module.WebEventListener = function (e) {
       break;
 
     case "onTarget":
-    unityInstance.SendMessage(
+      unityInstance.SendMessage(
         "WebNetworkMgr",
         "OnRequestTarget",
         JSON.stringify(message.data)
       );
       break;
+
+    case "onRestart":
+      console.log("Restart Called");
+      unityInstance.SendMessage(
+        "WebNetworkMgr",
+        "OnRequestRestart",
+      );
+      break;  
 
     case "pause":
       break;
