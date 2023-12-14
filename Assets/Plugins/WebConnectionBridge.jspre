@@ -35,14 +35,6 @@ Module.WebEventListener = function (e) {
 
     case "mute":
       break;
-
-    case "onRestart":
-      console.log("Restart Called");
-      unityInstance.SendMessage(
-        "WebNetworkMgr",
-        "OnRestart"
-      );
-      break;
     }
   }
 };

@@ -149,11 +149,6 @@ public class WebNetworkMgr : SingletonComponentBase<WebNetworkMgr>
         onRequestTargetCallBack.Invoke();
     }
 
-    public void OnRestart()
-    {
-        SceneManager.LoadScene(0);
-    }
-
     //private void OnApplicationQuit()
     //{
     //    if (null != SocketClient.Instance)

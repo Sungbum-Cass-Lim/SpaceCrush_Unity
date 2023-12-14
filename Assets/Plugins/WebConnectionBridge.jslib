@@ -59,9 +59,9 @@ var jslib = {
         );
   },
 
- SendEndGame: function(score) {
+ SendEndGame: function(data) {
     unityInstance.Module.SendPostMessage(
-      unityInstance.Module.GetPostMessage("sendEndGame", {score:score})
+      unityInstance.Module.GetPostMessage("sendEndGame", data)
     );
   },
 };
