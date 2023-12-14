@@ -35,7 +35,6 @@ Module.WebEventListener = function (e) {
 
     case "mute":
       break;
-    }
   }
 };
 
