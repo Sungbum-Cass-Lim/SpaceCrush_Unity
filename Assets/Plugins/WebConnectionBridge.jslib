@@ -56,12 +56,12 @@ var jslib = {
   SendFrontError: function(data) {
      unityInstance.Module.SendPostMessage(
           unityInstance.Module.GetPostMessage("error", JSON.parse(UTF8ToString(data)))
-        );
+    );
   },
 
- SendEndGame: function(score) {
+ SendEndGame: function(_score) {
     unityInstance.Module.SendPostMessage(
-      unityInstance.Module.GetPostMessage("sendEndGame", {score:score})
+      unityInstance.Module.GetPostMessage("sendEndGame", {score:_score})
     );
   },
 };

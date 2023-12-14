@@ -1,20 +1,25 @@
 Module.WebEventListener = function (e) {
   //console.log("WebEventListener", e.origin, Data.ORIGIN);
-  if (Data.ORIGIN.indexOf(e.origin) === -1 && Data.ORIGIN.indexOf("") === -1) {
-  return;
+  if (Data.ORIGIN.indexOf(e.origin) === -1 && Data.ORIGIN.indexOf("") === -1) 
+  {
+    return;
   }
 
   let message = null;
 
   // json 형식이 아니면 안됨
-  try {
+  try 
+  {
     message = JSON.parse(e.data);
-  } catch (error) {
+  } 
+  catch (error) 
+  {
     return;
   }
   console.log(message);
 
-  switch (message.message) {
+  switch (message.message) 
+  {
     case "token":
     case "onToken":
       unityInstance.SendMessage(
@@ -23,6 +28,7 @@ Module.WebEventListener = function (e) {
         JSON.stringify(message.data)
       );
       break;
+
     case "onTarget":
     unityInstance.SendMessage(
         "WebNetworkMgr",
@@ -30,6 +36,7 @@ Module.WebEventListener = function (e) {
         JSON.stringify(message.data)
       );
       break;
+
     case "pause":
       break;
 

@@ -23,7 +23,7 @@ public class WebNetworkMgr : SingletonComponentBase<WebNetworkMgr>
     [DllImport("__Internal")]
     public static extern void SendFrontError(string data);
     [DllImport("__Internal")]
-    public static extern void SendEndGame(int score);
+    public static extern void SendEndGame(int _score);
 
 
     public Action<bool> onRequestTokenCallBack = null; //프론트 통신용 콜백
