@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class UserInfo
 {
     public int uid = 0;
@@ -13,7 +14,7 @@ public class UserInfo
 
 public class UserManager : SingletonComponentBase<UserManager>
 {
-    public UserInfo userInfo { get; private set; } = null;
+    public UserInfo userInfo;
 
     protected override void InitializeSingleton(){}
 

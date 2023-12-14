@@ -98,6 +98,8 @@ public class NetworkMgr : SingletonComponentBase<NetworkMgr>
         Debug.Log($"[Recv : EndGame] => {res}");
         GameEndResDto endRes = JsonUtility.FromJson<GameEndResDto>(res);
 
+        WebNetworkMgr.SendEndGame(endRes.score);
+
         if (endRes.result)
             GameMgr.Instance.GameOver();
     }

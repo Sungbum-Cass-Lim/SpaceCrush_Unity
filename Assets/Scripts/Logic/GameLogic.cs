@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 public class GameLogic : MonoBehaviour
 {
     [Header("UI")]
@@ -35,7 +35,7 @@ public class GameLogic : MonoBehaviour
 
     private void FixedUpdate()
     {
-        ScoreText.text = GameMgr.Instance.GameScore.ToString(); 
+        ScoreText.text = GameMgr.Instance.GameScore.ToString();
 
         //wave »ý¼º
         if (currentWaveList.Count < MaxSpawnWave && GameMgr.Instance.gameState == GameState.Game)

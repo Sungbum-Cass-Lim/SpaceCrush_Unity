@@ -39,6 +39,9 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
     {
         TextAsset info = new TextAsset(GameStartResDto);
         waveInfos = JsonHelper.ReadJson<GameStartResDto>(info);
+
+        UserManager.Instance.userInfo.pid = waveInfos.pid;
+
         Debug.Log("Load Wave Data");
 
         blockData = waveInfos.boxData;

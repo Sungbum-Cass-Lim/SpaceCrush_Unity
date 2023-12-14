@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class WebNetworkMgr : SingletonComponentBase<WebNetworkMgr>
 {
@@ -21,6 +22,8 @@ public class WebNetworkMgr : SingletonComponentBase<WebNetworkMgr>
 
     [DllImport("__Internal")]
     public static extern void SendFrontError(string data);
+    [DllImport("__Internal")]
+    public static extern void SendEndGame(int data);
 
 
     public Action<bool> onRequestTokenCallBack = null; //프론트 통신용 콜백
@@ -144,6 +147,11 @@ public class WebNetworkMgr : SingletonComponentBase<WebNetworkMgr>
     public void OnRequestTarget(string data)
     {
         onRequestTargetCallBack.Invoke();
+    }
+
+    public void OnRestart()
+    {
+        SceneManager.LoadScene(0);
     }
 
     //private void OnApplicationQuit()

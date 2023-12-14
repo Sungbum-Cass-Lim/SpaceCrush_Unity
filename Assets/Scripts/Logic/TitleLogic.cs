@@ -22,8 +22,9 @@ public class TitleLogic : MonoBehaviour
         startTextColorCorutine = StartCoroutine(StartTextColor());
     }
 
-    private void OnEnable()
+    private void Start()
     {
+        Debug.Log("Asdqweqweqhwe");
         WebNetworkMgr.Instance.InitTargetGame(() =>
         {
             WebNetworkMgr.Instance.SetLoading(false);

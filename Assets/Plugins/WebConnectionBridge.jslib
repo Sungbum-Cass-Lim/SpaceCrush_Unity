@@ -58,6 +58,12 @@ var jslib = {
           unityInstance.Module.GetPostMessage("error", JSON.parse(UTF8ToString(data)))
         );
   },
+
+ SendEndGame: function(score) {
+    unityInstance.Module.SendPostMessage(
+      unityInstance.Module.GetPostMessage("sendEndGame", {score:score})
+    );
+  },
 };
 
 autoAddDeps(jslib, "$Data");
