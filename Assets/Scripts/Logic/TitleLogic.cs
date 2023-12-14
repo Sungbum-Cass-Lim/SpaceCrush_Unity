@@ -10,6 +10,8 @@ public class TitleLogic : MonoBehaviour
     public Text versionText;
     public Text gameStartText;
 
+    public GameObject TouchBlock;
+
     private Color startTextColor;
 
     private Coroutine startTextColorCorutine;
@@ -62,6 +64,8 @@ public class TitleLogic : MonoBehaviour
 
     public void OnStartButton()
     {
+        TouchBlock.SetActive(true);
+
         StopCoroutine(startTextColorCorutine);
         gameStartText.color = startTextColor;
 
