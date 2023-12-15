@@ -36,5 +36,6 @@ public class GameMgr : SingletonComponentBase<GameMgr>
         gameState = GameState.GameEnd;
         GameScore = 0;
         Player = null;
+        SoundMgr.Instance.SetMute(true);
     }
 }

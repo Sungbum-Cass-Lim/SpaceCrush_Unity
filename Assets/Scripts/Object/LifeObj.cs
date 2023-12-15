@@ -22,11 +22,12 @@ public class LifeObj : WaveContent
         GameMgr.Instance.Player.AddLife(life);
         WaveMgr.Instance.UploadLog(index, GameMgr.Instance.Player.GetLife(), 9);
 
-        gameObject.SetActive(false);
+        DeleteEvent.Invoke();
     }
 
     protected override void OnDelete()
     {
+        Debug.Log("LifeDelete");
         SoundMgr.Instance.PlayFx("item");
         parentWave.ContentRelease(this);
     }

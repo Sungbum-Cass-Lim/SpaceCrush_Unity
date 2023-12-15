@@ -154,6 +154,12 @@ public class WebNetworkMgr : SingletonComponentBase<WebNetworkMgr>
         SceneManager.LoadScene(0);
     }
 
+    public void OnRequestMute(bool show)
+    {
+        Debug.Log(show);
+        SoundMgr.Instance.SetMute(show);
+    }
+
     //private void OnApplicationQuit()
     //{
     //    if (null != SocketClient.Instance)

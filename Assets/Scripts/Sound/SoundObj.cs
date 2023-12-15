@@ -17,6 +17,7 @@ public class SoundObj : MonoBehaviour
 
     public void Init(AudioClip clip, bool isLoop = false)
     {
+        Debug.Log(clip.name);
         this.clip = clip;
         audioLength = Time.realtimeSinceStartup + clip.length;
         loop = isLoop;
@@ -35,7 +36,7 @@ public class SoundObj : MonoBehaviour
     public void Stop()
     {
         audioSource.Stop();
-        Destroy(this.gameObject);
+        ObjectPoolMgr.Instance.ReleasePool(gameObject);
     }
 
     //TODO: 나중에 Update말고 최적화 가능한 방향으로 수정 필요

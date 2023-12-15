@@ -29,6 +29,8 @@ public class SoundMgr : SingletonComponentBase<SoundMgr>
     private Transform bgmContainer;
     private Transform fxContainer;
 
+    private List<AudioSource> playSoundList = new List<AudioSource>();
+
     public SoundObj SoundComponent;
 
     protected override void InitializeSingleton(){}
@@ -70,6 +72,7 @@ public class SoundMgr : SingletonComponentBase<SoundMgr>
     public void PlayDefultBgm()
     {
         AudioSource bgm = bgmContainer.GetComponent<AudioSource>();
+        playSoundList.Add(bgm);
 
         bgm.clip = defultBgm;
         bgm.Play();
@@ -92,9 +95,11 @@ public class SoundMgr : SingletonComponentBase<SoundMgr>
 
     public void PlayFx(string fxName, bool isLoop = false)
     {
-        SoundObj fxObj = Instantiate(SoundComponent);
+        SoundObj fxObj = ObjectPoolMgr.Instance.Load<SoundObj>(PoolObjectType.Effect, "SoundComponent");
         fxObj.name = fxName;
         fxObj.transform.SetParent(fxContainer);
+
+        playSoundList.Add(fxObj.audioSource);
 
         if(fxDictionay.TryGetValue (fxName, out var clip))
         {
@@ -105,6 +110,24 @@ public class SoundMgr : SingletonComponentBase<SoundMgr>
     public void PlayFx(SoundType fxType, bool isLoop = false)
     {
         PlayFx(SoundTypeToName(fxType), isLoop);
+    }
+
+    public void SetMute(bool show)
+    {
+        if(show)
+        {
+            foreach(var audio in playSoundList)
+            {
+                audio.volume = 0.0f;
+            }
+        }
+        else
+        {
+            foreach (var audio in playSoundList)
+            {
+                audio.volume = 0.5f;
+            }
+        }
     }
 
     public string SoundTypeToName(SoundType type)

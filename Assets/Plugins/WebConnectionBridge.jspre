@@ -50,6 +50,12 @@ Module.WebEventListener = function (e) {
       break;
 
     case "mute":
+      console.log(message.data)
+      unityInstance.SendMessage(
+        "WebNetworkMgr",
+        "OnRequestMute",
+        message.data
+      );
       break;
   }
 };
