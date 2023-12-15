@@ -11,6 +11,8 @@ public enum GameState
 
 public class GameMgr : SingletonComponentBase<GameMgr>
 {
+    private static bool muteBackup;
+
     [Header("Current Game Info")]
     public GameState gameState = GameState.Title;
     public PlayerController Player = null;
@@ -22,7 +24,7 @@ public class GameMgr : SingletonComponentBase<GameMgr>
 
     protected override void InitializeSingleton()
     {
-        SoundMgr.Instance.SetMute(SoundMgr.isMute);
+        SoundMgr.Instance.SetMute(muteBackup);
         gameState = GameState.Title;
     }
 
@@ -37,6 +39,9 @@ public class GameMgr : SingletonComponentBase<GameMgr>
         gameState = GameState.GameEnd;
         GameScore = 0;
         Player = null;
+
+        muteBackup = SoundMgr.isMute; 
+
         SoundMgr.Instance.SetMute(true);
     }
 }
