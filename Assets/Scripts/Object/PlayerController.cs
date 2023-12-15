@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 startPlayerPos;
     private Vector2 moveMouesePos;
 
-    private float originMoveSpeed = 7f;
+    private float originMoveSpeed = 8f;
     private float currentMoveSpeed;
 
     public WallObj CurrentWall;
