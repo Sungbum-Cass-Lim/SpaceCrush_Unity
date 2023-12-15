@@ -19,6 +19,8 @@ public enum SoundType
 
 public class SoundMgr : SingletonComponentBase<SoundMgr>
 {
+    public static bool isMute = false;
+
     public AudioClip defultBgm;
     public List<AudioClip> bgmClipList = new List<AudioClip>();
     public List<AudioClip> fxClipList = new List<AudioClip>();
@@ -36,6 +38,9 @@ public class SoundMgr : SingletonComponentBase<SoundMgr>
     protected override void InitializeSingleton(){}
     private void Awake()
     {
+        Debug.Log(isMute);
+
+
         BgmInit();
         FxInit();
 
@@ -50,7 +55,7 @@ public class SoundMgr : SingletonComponentBase<SoundMgr>
 
         AudioSource bgm = bgmContainer.gameObject.AddComponent<AudioSource>();
         bgm.loop = true;
-        bgm.volume = 0.5f;
+        bgm.volume = isMute == true ? 0.0f : 0.5f; ;
 
         foreach (var bgmClip in bgmClipList)
         {
@@ -114,7 +119,9 @@ public class SoundMgr : SingletonComponentBase<SoundMgr>
 
     public void SetMute(bool show)
     {
-        if(show)
+        isMute = show;
+
+        if (show)
         {
             foreach(var audio in playSoundList)
             {

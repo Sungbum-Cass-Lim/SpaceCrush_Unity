@@ -3,6 +3,11 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public class MuteData
+{
+    public bool mute;
+}
+
 public class WebNetworkMgr : SingletonComponentBase<WebNetworkMgr>
 {
     [DllImport("__Internal")]
@@ -154,10 +159,12 @@ public class WebNetworkMgr : SingletonComponentBase<WebNetworkMgr>
         SceneManager.LoadScene(0);
     }
 
-    public void OnRequestMute(bool show)
+    public void OnRequestMute(string data)
     {
-        Debug.Log(show);
-        SoundMgr.Instance.SetMute(show);
+        Debug.Log(data);
+
+        MuteData muteData = JsonUtility.FromJson<MuteData>(data);
+        SoundMgr.Instance.SetMute(muteData.mute);
     }
 
     //private void OnApplicationQuit()

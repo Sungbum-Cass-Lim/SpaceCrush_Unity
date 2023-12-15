@@ -17,7 +17,6 @@ public class SoundObj : MonoBehaviour
 
     public void Init(AudioClip clip, bool isLoop = false)
     {
-        Debug.Log(clip.name);
         this.clip = clip;
         audioLength = Time.realtimeSinceStartup + clip.length;
         loop = isLoop;
@@ -28,7 +27,7 @@ public class SoundObj : MonoBehaviour
     {
         audioSource.clip = clip;
         audioSource.loop = loop;
-        audioSource.volume = 0.5f;
+        audioSource.volume = SoundMgr.isMute == true ? 0.0f : 0.5f;
 
         audioSource.Play();
     }

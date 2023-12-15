@@ -27,7 +27,6 @@ public class LifeObj : WaveContent
 
     protected override void OnDelete()
     {
-        Debug.Log("LifeDelete");
         SoundMgr.Instance.PlayFx("item");
         parentWave.ContentRelease(this);
     }

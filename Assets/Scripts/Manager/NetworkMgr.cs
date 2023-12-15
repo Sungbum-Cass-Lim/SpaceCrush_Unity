@@ -2,11 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using BestHTTP;
 using BestHTTP.SocketIO3;
 using BestHTTP.SocketIO3.Transports;
 using Newtonsoft.Json;
-using BestHTTP.Authentication;
 
 public class NetworkMgr : SingletonComponentBase<NetworkMgr>
 {

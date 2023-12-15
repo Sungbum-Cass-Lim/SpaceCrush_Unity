@@ -22,6 +22,7 @@ public class GameMgr : SingletonComponentBase<GameMgr>
 
     protected override void InitializeSingleton()
     {
+        SoundMgr.Instance.SetMute(SoundMgr.isMute);
         gameState = GameState.Title;
     }
 
