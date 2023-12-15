@@ -101,7 +101,15 @@ public class NetworkMgr : SingletonComponentBase<NetworkMgr>
 #endif
 
         if (endRes.result)
+        {
             GameMgr.Instance.GameOver();
+
+            serverSocket.Disconnect();
+            serverManager.Close();
+
+            serverSocket = null;
+            serverManager = null;
+        }
     }
 #endregion
 
