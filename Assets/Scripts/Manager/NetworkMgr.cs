@@ -23,9 +23,9 @@ public class NetworkMgr : SingletonComponentBase<NetworkMgr>
 #elif USE_WEBGL_DEV
         address = "https://dev-tournament.playdapp.com/spacecrush/socket.io";
 #elif USE_WEBGL_QA
-        address = "https://qa-tournament.playdapp.com//spacecrush/socket.io";
+        address = "https://qa-tournament.playdapp.com/spacecrush/socket.io";
 #elif USE_WEBGL_PROD
-        address = "https://prod-tournament.playdapp.com//spacecrush/socket.io";
+        address = "https://prod-tournament.playdapp.com/spacecrush/socket.io";
 #endif
 #elif UNITY_EDITOR
         address = "ws://127.0.0.1:4001/spacecrush/socket.io"; //º»Á¡
