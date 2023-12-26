@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>{{{PRODUCT_NAME}}}</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+</head>
+
+<body>
+    <div id="unity-container" class="unity-mobile">
+        <canvas id="unity-canvas"></canvas>
+        <div id="loading-container">
+            <img id="loading-logo" src="TemplateData/playdapp_logo.png"></img>
+            <img id="loading-text" src="TemplateData/loading_text.svg"></img>
+            <div class="progress-bar stripes">
+                <span id="progress-ratio" style="width: 0%;"></span>
+            </div>
+
+            <script>
+                var buildPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
+                var buildFolderName = buildPath.substring(buildPath.lastIndexOf('/') + 1);
+                console.log(buildFolderName);
+
+                var buildUrl = "Build";
+                var loaderUrl = buildUrl + "/{{{LOADER_FILENAME}}}";
+                var config = {
+                    dataUrl: buildUrl + "/{{{DATA_FILENAME}}}",
+                    frameworkUrl: buildUrl + "/{{{FRAMEWORK_FILENAME}}}",
+                    codeUrl: buildUrl + "/{{{CODE_FILENAME}}}",
+                    streamingAssetsUrl: "StreamingAssets",
+                    companyName: "{{{COMPANY_NAME}}}",
+                    productName: "{{{PRODUCT_NAME}}}",
+                    productVersion: "1.0",
+                };
+
+                var container = document.querySelector("#unity-container");
+                var canvas = document.querySelector("#unity-canvas");
+                var loadingContainer = document.querySelector("#loading-container");
+                var progressBarFull = document.querySelector("#progress-ratio");
+
+                var unityInstance = null;
+                config.devicePixelRatio = 1;
+
+                var script = document.createElement("script");
+                script.src = loaderUrl;
+                script.onload = () => {
+                    createUnityInstance(canvas, config, (progress) => {
+                        progressBarFull.style.width = 100 * progress + "%";
+                    }).then((unityInstance) => {
+                        loadingContainer.style.display = "none";
+                        window.unityInstance = unityInstance;
+                    }).catch((message) => {
+                        alert(message);
+                    });
+                };
+                document.body.appendChild(script);
+
+                function startForeground(backgroundState) {
+                    console.log("not loaded game", backgroundState);
+                }
+
+                function setAsmrState(asmr, state) {
+                    console.log("not loaded game", asmr, state);
+                }
+
+                function resize() {
+                    let targetWidth = "{{{WIDTH}}}"
+                    let targetHeight = "{{{HEIGHT}}}"
+
+                    let windowWidth = window.innerWidth;
+                    let windowHeight = window.innerHeight;
+                    let ratio = windowWidth / windowHeight
+                    let width = 0;
+                    let height = 0;
+                    let imageWidth = 0;
+                    let imageHeight = 0;
+
+                    if (ratio > targetWidth / targetHeight) {
+                        width = windowHeight / targetHeight * targetWidth;
+                        height = windowHeight;
+                        imageWidth = width;
+                        imageHeight = height;
+                    }
+                    else {
+                        width = windowWidth;
+                        height = windowWidth / targetWidth * targetHeight;
+                        imageWidth = height / targetHeight * targetWidth;
+                        imageHeight = height;
+                    }
+
+                    let canvas = document.querySelector("#unity-canvas");
+                    canvas.width = width;
+                    canvas.height = height;
+                }
+
+                resize();
+                window.addEventListener("resize", resize);
+            </script>
+</body>
+
+</html>
