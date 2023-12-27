@@ -9,12 +9,16 @@
     <link rel="stylesheet" href="TemplateData/style.css">
 </head>
 
-<body>
-    <div id="unity-container" class="unity-mobile">
-        <canvas id="unity-canvas"></canvas>
-        <div id="loading-container">
-            <img id="loading-logo" src="TemplateData/playdapp_logo.png"></img>
-            <img id="loading-text" src="TemplateData/loading_text.svg"></img>
+<body style="text-align: center; padding: 0; border: 0; margin: 0;">
+    <div id="unity-container" class="unity-desktop" style="max-height: 100vh;">
+        <canvas id="unity-canvas" width="100%" height="100%"></canvas>
+        <div id="loading-container" style="max-width: none; max-height: none;">
+            <div id="loading-logo">
+                <img src="TemplateData/playdapp_logo.png">
+            </div>
+            <div id="loading-text">
+                <img src="TemplateData/loading_text.svg">
+            </div>
             <div class="progress-bar stripes">
                 <span id="progress-ratio" style="width: 0%;"></span>
             </div>
