@@ -22,6 +22,7 @@
             <div class="progress-bar stripes">
                 <span id="progress-ratio" style="width: 0%;"></span>
             </div>
+        </div>
 
             <script>
                 var buildPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
@@ -46,7 +47,6 @@
                 var progressBarFull = document.querySelector("#progress-ratio");
 
                 var unityInstance = null;
-                config.devicePixelRatio = 1;
 
                 var script = document.createElement("script");
                 script.src = loaderUrl;
@@ -62,42 +62,58 @@
                 };
                 document.body.appendChild(script);
 
-                function startForeground(backgroundState) {
-                    console.log("not loaded game", backgroundState);
-                }
-
-                function setAsmrState(asmr, state) {
-                    console.log("not loaded game", asmr, state);
-                }
-
                 function resize() {
-                    let targetWidth = "{{{WIDTH}}}"
-                    let targetHeight = "{{{HEIGHT}}}"
+                    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent) == false) {
+                        //전체 스크린의 사이즈가 달라져도 그것에 맞춰 다시 조정해준다.(WebGL 필수)
+                        config.devicePixelRatio = 1;
 
-                    let windowWidth = window.innerWidth;
-                    let windowHeight = window.innerHeight;
-                    let ratio = windowWidth / windowHeight
-                    let width = 0;
-                    let height = 0;
-                    let imageWidth = 0;
-                    let imageHeight = 0;
+                        let targetWidth = "{{{WIDTH}}}"
+                        let targetHeight = "{{{HEIGHT}}}"
 
-                    if (ratio > targetWidth / targetHeight) {
-                        width = windowHeight / targetHeight * targetWidth;
-                        height = windowHeight;
-                        imageWidth = width;
-                        imageHeight = height;
+                        let windowWidth = window.innerWidth;
+                        let windowHeight = window.innerHeight;
+                        let ratio = windowWidth / windowHeight
+                        let width = 0;
+                        let height = 0;
+
+                        if (ratio > targetWidth / targetHeight) {
+                            width = windowHeight / targetHeight * targetWidth;
+                            height = windowHeight;
+                        }
+                        else {
+                            width = windowWidth;
+                            height = windowWidth / targetWidth * targetHeight;
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
                     }
+
                     else {
-                        width = windowWidth;
-                        height = windowWidth / targetWidth * targetHeight;
-                        imageWidth = height / targetHeight * targetWidth;
-                        imageHeight = height;
-                    }
+                        // Mobile device style: fill the whole browser client area with the game canvas:
+                        var meta = document.createElement('meta');
+                        meta.name = 'viewport';
+                        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+                        document.getElementsByTagName('head')[0].appendChild(meta);
 
-                    let canvas = document.querySelector("#unity-canvas");
-                    canvas.width = width;
-                    canvas.height = height;
+                        container.className = "unity-mobile";
+
+                        if (window.innerHeight > window.innerWidth) {
+                            canvas.style.width = "100%";
+                            canvas.style.height = "auto";
+
+                            loadingContainer.style.width = "100%";
+                            loadingContainer.style.height = "auto";
+                        }
+
+                        else {
+                            canvas.style.width = "auto";
+                            canvas.style.height = "100%";
+
+                            loadingContainer.style.width = "auto";
+                            loadingContainer.style.height = "100%";
+                        }
+                    }
                 }
 
                 resize();

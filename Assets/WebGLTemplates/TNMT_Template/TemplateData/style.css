@@ -36,10 +36,13 @@ body {
 }
 
 .unity-mobile #unity-canvas {
+    position:  absolute;
+
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    position: absolute;
+
+    aspect-ratio: 640/960;
 }
 
 /* WebGL Loding */
@@ -47,7 +50,7 @@ body {
     position: fixed;
 
     height: 100%;
-    aspect-ratio: 0.666/1;
+    aspect-ratio: 640/960;
 
     left: 50%;
     top: 50%;
