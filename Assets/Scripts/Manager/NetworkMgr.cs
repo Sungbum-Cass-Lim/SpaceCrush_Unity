@@ -34,7 +34,6 @@ public class NetworkMgr : SingletonComponentBase<NetworkMgr>
 
     public void OnConnect(Action _connectCallBack)
     {
-        Debug.Log("Connecting...");
         SocketOptions options = new SocketOptions();
 
         options.ConnectWith = TransportTypes.WebSocket;
@@ -140,7 +139,6 @@ public class NetworkMgr : SingletonComponentBase<NetworkMgr>
 
         var jsonData = JsonConvert.SerializeObject(data);
 
-        Debug.Log($"[Send : {message}] => " + jsonData);
         serverSocket.EmitCallBack(callBack, message, jsonData);
     }
 }

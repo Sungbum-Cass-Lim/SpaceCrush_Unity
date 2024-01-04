@@ -26,7 +26,6 @@ public class TitleLogic : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("Asdqweqweqhwe");
         WebNetworkMgr.Instance.InitTargetGame(() =>
         {
             WebNetworkMgr.Instance.SetLoading(false);

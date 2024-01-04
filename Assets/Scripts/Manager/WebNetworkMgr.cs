@@ -121,9 +121,6 @@ public class WebNetworkMgr : SingletonComponentBase<WebNetworkMgr>
         }
         try
         {
-            Debug.Log(data);
-            Debug.Log(JsonUtility.FromJson<UserInfo>(data).uid);
-
             UserInfo userInfo = JsonUtility.FromJson<UserInfo>(data);
 
             if (userInfo.token != null)

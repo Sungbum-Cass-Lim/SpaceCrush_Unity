@@ -8,7 +8,11 @@ using UnityEngine;
 public class WallObj : WaveContent
 {
     public List<GameObject> wallType = new List<GameObject>();
+    public BoxCollider2D boxCollider2D;
+
     private int currentType = 0;
+    private float centerX;
+    private float halfExtentsX;
 
     public void Initialize(ContentType type)
     {
@@ -28,13 +32,13 @@ public class WallObj : WaveContent
         //오른쪽 벽
         if (GameMgr.Instance.Player.transform.position.x < transform.position.x)
         {
-            GameMgr.Instance.Player.moveMaxX = transform.position.x - 0.3f;
+            GameMgr.Instance.Player.moveMaxX = boxCollider2D.bounds.min.x;
         }
 
         //왼쪽 벽
         else
         {
-            GameMgr.Instance.Player.moveMinX = transform.position.x + 0.3f;
+            GameMgr.Instance.Player.moveMinX = boxCollider2D.bounds.max.x;
         }
     }
 

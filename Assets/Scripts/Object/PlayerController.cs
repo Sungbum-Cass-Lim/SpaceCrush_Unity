@@ -10,10 +10,10 @@ public class PlayerController : MonoBehaviour
     public GameObject playerCharacter;
     private MeshRenderer playerCharacterRender;
 
-    private Vector2 movementPos;
-    private Vector2 startMousePos;
-    private Vector2 startPlayerPos;
-    private Vector2 moveMouesePos;
+    public Vector2 startMousePos;
+    public Vector2 startPlayerPos;
+    public Vector2 moveMouesePos;
+    public Vector2 movementPos;
 
     private float originMoveSpeed = 8f;
     private float currentMoveSpeed;
@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour
 
         currentMoveSpeed = originMoveSpeed;
 
-        AddLife(WaveMgr.Instance.BlockData.playerLife - 1);
+        AddLife(200);//WaveMgr.Instance.BlockData.playerLife - 1);
     }
 
     private void Update()
@@ -208,6 +208,10 @@ public class PlayerController : MonoBehaviour
             {
                 startPlayerPos = transform.position;
                 startMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+                //TODO: EndPoint Reset(스타트 포인트만 리셋해서 엔드포인트가 끝에 잡혀있으면 혼자 움직이는게 보인다.)
+                moveMouesePos = startPlayerPos;
+                movementPos = startMousePos;
 
                 moveMaxX = 3f;
                 moveMinX = -3f;

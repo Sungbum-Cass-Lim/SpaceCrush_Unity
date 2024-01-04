@@ -38,9 +38,6 @@ public class SoundMgr : SingletonComponentBase<SoundMgr>
     protected override void InitializeSingleton(){}
     private void Awake()
     {
-        Debug.Log(isMute);
-
-
         BgmInit();
         FxInit();
 

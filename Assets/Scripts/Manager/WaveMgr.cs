@@ -42,8 +42,6 @@ public class WaveMgr : SingletonComponentBase<WaveMgr>
 
         UserManager.Instance.userInfo.pid = waveInfos.pid;
 
-        Debug.Log("Load Wave Data");
-
         blockData = waveInfos.boxData;
         obstaclesData = blockData.obstaclesData;
 

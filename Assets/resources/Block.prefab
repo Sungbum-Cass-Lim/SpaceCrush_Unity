@@ -132,6 +132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a65c91310f9cf44489e8b7c3a2fe04d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentWave: {fileID: 0}
   contentType: 0
   lifeText: {fileID: 1032106861931473385}
   DefultBlock: {fileID: 3501146212697855655}
@@ -180,7 +181,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.2, y: 0.4}
+  m_Size: {x: 1, y: 0.4}
   m_EdgeRadius: 0
 --- !u!1 &7726240413710740767
 GameObject:
