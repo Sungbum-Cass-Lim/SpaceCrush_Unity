@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     private float currentMoveSpeed;
 
     public WallObj CurrentWall;
+    public bool isWall = false;
     private float mouseMaxX = 4f;
     private float mouseMinX = -4f;
     public float moveMaxX = 3f;
@@ -119,8 +120,10 @@ public class PlayerController : MonoBehaviour
 
     private void PlayerMove()
     {
+
         transform.position = Vector2.Lerp(transform.position, movementPos, Time.deltaTime * currentMoveSpeed);
         transform.position = new Vector2(Mathf.Clamp(transform.position.x, moveMinX, moveMaxX), -1f);
+
     }
 
     private void TailMove()
@@ -210,8 +213,8 @@ public class PlayerController : MonoBehaviour
                 startMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
                 //TODO: EndPoint Reset(스타트 포인트만 리셋해서 엔드포인트가 끝에 잡혀있으면 혼자 움직이는게 보인다.)
-                moveMouesePos = startPlayerPos;
-                movementPos = startMousePos;
+                moveMouesePos = startMousePos;
+                movementPos = startPlayerPos;
 
                 moveMaxX = 3f;
                 moveMinX = -3f;
