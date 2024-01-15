@@ -31,12 +31,10 @@ public class GameLogic : MonoBehaviour
     private void Awake()
     {
         currentDownSpeed = originDownSpeed;
-        FeverStart();
     }
 
     private void FixedUpdate()
     {
-        Debug.Log("123");
         ScoreText.text = GameMgr.Instance.GameScore.ToString();
 
         //wave »ý¼º
@@ -53,7 +51,7 @@ public class GameLogic : MonoBehaviour
         {
             foreach (var wave in currentWaveList)
             {
-                wave.rigidbody2d.MovePosition((Vector2)wave.transform.position + (Vector2.down * currentDownSpeed * Time.fixedDeltaTime));
+                wave.rigidbody2d.MovePosition(wave.rigidbody2d.position + (Vector2.down * currentDownSpeed * Time.fixedDeltaTime));
 
                 if (wave.transform.position.y < -10f)
                 {
@@ -112,7 +110,7 @@ public class GameLogic : MonoBehaviour
     {
         isFever = true;
 
-        feverTime = GameConfig.FEVER_TIME * 1000;
+        feverTime = GameConfig.FEVER_TIME;
         currentDownSpeed = originDownSpeed + GameConfig.FEVER_UP * 2;
         bgController.BgFeverStart();
     }
