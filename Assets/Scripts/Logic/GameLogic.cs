@@ -31,10 +31,12 @@ public class GameLogic : MonoBehaviour
     private void Awake()
     {
         currentDownSpeed = originDownSpeed;
+        FeverStart();
     }
 
     private void FixedUpdate()
     {
+        Debug.Log("123");
         ScoreText.text = GameMgr.Instance.GameScore.ToString();
 
         //wave »ý¼º
@@ -110,7 +112,7 @@ public class GameLogic : MonoBehaviour
     {
         isFever = true;
 
-        feverTime = GameConfig.FEVER_TIME;
+        feverTime = GameConfig.FEVER_TIME * 1000;
         currentDownSpeed = originDownSpeed + GameConfig.FEVER_UP * 2;
         bgController.BgFeverStart();
     }

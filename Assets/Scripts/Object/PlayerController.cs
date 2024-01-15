@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
 
         currentMoveSpeed = originMoveSpeed;
 
-        AddLife(200);//WaveMgr.Instance.BlockData.playerLife - 1);
+        AddLife(WaveMgr.Instance.BlockData.playerLife - 1);
     }
 
     private void Update()
@@ -150,10 +150,13 @@ public class PlayerController : MonoBehaviour
         {
             playerLife++;
 
-            GameObject lifeObj = ObjectPoolMgr.Instance.Load<Transform>(PoolObjectType.Player, "LifeTail").gameObject;
-            lifeObj.transform.position = currentTailList[currentTailList.Count - 1].transform.position + (Vector3.down * lifeInterverPosY);
+            if(playerLife <= 15)
+            {
+                GameObject lifeObj = ObjectPoolMgr.Instance.Load<Transform>(PoolObjectType.Player, "LifeTail").gameObject;
+                lifeObj.transform.position = currentTailList[currentTailList.Count - 1].transform.position + (Vector3.down * lifeInterverPosY);
 
-            currentTailList.Add(lifeObj);
+                currentTailList.Add(lifeObj);
+            }
         }
 
         lifeText.text = playerLife.ToString();
@@ -172,10 +175,13 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        StartCoroutine(RemoveLifeEffect(currentTailList[currentTailList.Count - 1].transform));
+        if (playerLife < 15)
+        {
+            StartCoroutine(RemoveLifeEffect(currentTailList[currentTailList.Count - 1].transform));
 
-        ObjectPoolMgr.Instance.ReleasePool(currentTailList[currentTailList.Count - 1]);
-        currentTailList.RemoveAt(currentTailList.Count - 1);
+            ObjectPoolMgr.Instance.ReleasePool(currentTailList[currentTailList.Count - 1]);
+            currentTailList.RemoveAt(currentTailList.Count - 1);
+        }
 
         lifeText.text = playerLife.ToString();
     }
