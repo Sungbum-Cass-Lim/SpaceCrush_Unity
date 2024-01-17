@@ -26,18 +26,20 @@ public class GameMgr : SingletonComponentBase<GameMgr>
     {
         SoundMgr.Instance.SetMute(muteBackup);
         gameState = GameState.Title;
+
+        GameScore = 0;
     }
 
     public void GameStart(PlayerController CurPlayer)
     {
         gameState = GameState.Game;
+
         Player = CurPlayer;
     }
 
     public void GameOver()
     {
         gameState = GameState.GameEnd;
-        GameScore = 0;
         Player = null;
 
         muteBackup = SoundMgr.isMute; 
